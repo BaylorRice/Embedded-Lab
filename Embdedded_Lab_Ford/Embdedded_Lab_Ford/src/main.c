@@ -102,7 +102,7 @@ int main (void)
 		}
 		
 		// Is breadboard button pressed?
-		if (ioport_get_pin_level(EXT1_PIN_7) == true) {
+		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
 			
 			// Yes, so turn LED on
 			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);

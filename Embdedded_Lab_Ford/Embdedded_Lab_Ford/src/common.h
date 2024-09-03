@@ -7,6 +7,10 @@
 #define BREADBOARD_LED_ON  1
 #define NUM_MICROCONTROLLER_PINS 100
 
+// breadboard button macros
+#define BREADBOARD_BUTTON_PIN EXT1_PIN_7
+#define BREADBOARD_BUTTON_ACIVE true
+
 // pin level enumeration
 // "level" indicates the voltage level of
 // the input, either high or low
