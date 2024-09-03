@@ -1,0 +1,7 @@
+Male Orange - Digilent 1+
+Male Black - Digilent GND
+
+Female Black - PWR Pin 2
+Female Red - PWR Pin 4
+Female Brown - EXT1 Pin 6
+Female Yellow - EXT1 Pin 7
