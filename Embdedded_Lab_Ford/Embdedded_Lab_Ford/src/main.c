@@ -1,8 +1,9 @@
 /**
- * \file
- *
- * \brief Empty user application template
- *
+ * Embedded Lab - Atmel
+ * Reese Ford
+ * Created: Aug 29, 2024
+ * Modified: Sept 04, 2024
+ * Last Commit: 061fe5503ab19d15f729515a2ee082f1b8654d20
  */
 
 /**
@@ -134,10 +135,16 @@ int main (void)
 	{
 		// On blueboard button press, toggle led_power
 		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE) {
+			
+			// If the button was just pressed, toggle power
 			if (board_letgo) {
 				board_led_power = !board_led_power;
+				
+				// Set the check variable to false, telling the program the button was NOT just pressed
 				board_letgo = false;
 			}
+		
+		// If the button was let go, change back the check variable
 		} else {
 			board_letgo = true;
 		}
@@ -157,10 +164,16 @@ int main (void)
 		
 		// On breadboard button press, toggle led_power
 		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
+			
+			// If the button was just pressed, toggle power
 			if (bread_letgo) {
 				bread_led_power = !bread_led_power;
+				
+				// Set the check variable to false, telling the program the button was NOT just pressed
 				bread_letgo = false;
 			}
+		
+		// If the button was let go, change back the check variable
 		} else {
 			bread_letgo = true;
 		}
