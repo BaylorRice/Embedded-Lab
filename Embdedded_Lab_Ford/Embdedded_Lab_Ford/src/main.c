@@ -124,34 +124,58 @@ int main (void)
 	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
 	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
 
+	// define hold and power variables
+	bool board_letgo = true;
+	bool bread_letgo = true;
+	bool board_led_power = false;
+	bool bread_led_power = false;
+
 	while (1)
 	{
-		// Is blueboard button pressed?
-		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
+		// On blueboard button press, toggle led_power
+		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE) {
+			if (board_letgo) {
+				board_led_power = !board_led_power;
+				board_letgo = false;
+			}
+		} else {
+			board_letgo = true;
+		}
+		
+		
+		// Is board_led_power true?
+		if (board_led_power)
 		{
 			// Yes, so turn LED on
 			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-
 		}
 		else
 		{
 			// No, so turn LED off
 			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-
-			
 		}
 		
-		// Is breadboard button pressed?
+		// On breadboard button press, toggle led_power
 		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
-			
+			if (bread_letgo) {
+				bread_led_power = !bread_led_power;
+				bread_letgo = false;
+			}
+		} else {
+			bread_letgo = true;
+		}
+		
+		
+		// Is bread_led_power true?
+		if (bread_led_power)
+		{
 			// Yes, so turn LED on
 			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-			
-			} else {
-			
+		}
+		else
+		{
 			// No, so turn LED off
 			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
-			
 		}
 	}
 
