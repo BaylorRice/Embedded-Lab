@@ -207,20 +207,21 @@ int main (void)
 
 	while (1)
 	{
+		check_gpio_input_state(BUTTON_0_PIN);
 		// Check GPIO Input State for Button
 		
 		// IF button_state is Falling Edge
-		{
+		//{
 			// IF led_state is OFF
-			{
+			//{
 				// Turn LED on
-			}
+			//}
 			
 			// IF led_state is ON
-			{
+			//{
 				// Turn LED off
-			}
-		}
+			//}
+		//}
 	}
 	#endif
 }
