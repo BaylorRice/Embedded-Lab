@@ -206,10 +206,13 @@ int main (void)
 	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
 	
 	GPIO_INPUT_STATE_TYPE board_button_state = GPIO_INPUT_STATE_LOW;
+	GPIO_INPUT_STATE_TYPE bread_button_state = GPIO_INPUT_STATE_LOW;
 	LED_STATE_TYPE board_led_state = LED_STATE_OFF;
+	LED_STATE_TYPE bread_led_state = LED_STATE_OFF;
 	
 	while (1)
 	{
+		/// Blue Board LED
 		// Check GPIO Input State for Button
 		board_button_state = check_gpio_input_state(BUTTON_0_PIN);
 		
@@ -236,6 +239,35 @@ int main (void)
 			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
 		} else {
 			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
+		}
+		
+		/// Bread Board LED
+		// Check GPIO Input State for Button
+		bread_button_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
+		
+		// IF button_state is Falling Edge
+		if (bread_button_state == GPIO_INPUT_STATE_RISING_EDGE)
+		{
+			// IF led_state is OFF
+			if (bread_led_state == LED_STATE_OFF)
+			{
+				// Turn LED on
+				bread_led_state = LED_STATE_ON;
+			}
+			
+			// IF led_state is ON
+			else if (bread_led_state == LED_STATE_ON)
+			{
+				// Turn LED off
+				bread_led_state = LED_STATE_OFF;
+			}
+		}
+		
+		// Update LED power with state variable
+		if (bread_led_state == LED_STATE_ON) {
+			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
+			} else {
+			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
 		}
 		
 		
