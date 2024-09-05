@@ -196,7 +196,7 @@ int main (void)
 
 	#endif
 	
-	#ifdef DOUBLE_FLASHLIGHT
+	#ifdef DOUBLE_FLASHLIGHT // See commit 98f0773d55e31ef66a2609b0989ffe9f29544dce for assumed edge-detecting method
 	// configure BREADBOARD_LED_PIN
 	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
 	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
@@ -204,49 +204,14 @@ int main (void)
 	// configure EXT1_PIN_7
 	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
 	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-	
-	bool board_led_power = false;
-	bool bread_led_power = false;
-	bool last_board_button = false;
-	bool last_bread_button = false;
 
 	while (1)
 	{
 		
-		// Is blueboard button pressed?
-		if ((ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE) && !last_board_button)
 		{
-			board_led_power = !board_led_power;
-			last_board_button = true;
-			
-		} else {
-			if (ioport_get_pin_level(BUTTON_0_PIN) != BUTTON_0_ACTIVE) {
-				last_board_button = false;
 			}
-		}
-		
-		if (board_led_power) {
-			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-		} else {
-			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-		}
-		
-		// Is breadboard button pressed?
-		if ((ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) && !last_bread_button)
-		{
-			bread_led_power = !bread_led_power;
-			last_bread_button = true;
 			
-			} else {
-			if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) != BREADBOARD_BUTTON_ACIVE) {
-				last_bread_button = false;
 			}
-		}
-		
-		if (bread_led_power) {
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-			} else {
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
 		}
 	}
 	#endif
