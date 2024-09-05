@@ -39,6 +39,7 @@
 
 //#define ONE_BUTTON_TWO_LED
 //#define TWO_BUTTON_TWO_LED
+//#define DOUBLE_FLASHLIGHT_REESE
 #define DOUBLE_FLASHLIGHT
 
 int main (void)
@@ -116,7 +117,8 @@ int main (void)
 		}
 	}
 	#endif
-	#ifdef DOUBLE_FLASHLIGHT
+	
+	#ifdef DOUBLE_FLASHLIGHT_REESE
 	// configure BREADBOARD_LED_PIN
 	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
 	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
@@ -192,5 +194,46 @@ int main (void)
 		}
 	}
 
+	#endif
+	
+	#ifdef DOUBLE_FLASHLIGHT
+	// configure BREADBOARD_LED_PIN
+	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
+	
+	// configure EXT1_PIN_7
+	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
+	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
+
+	while (1)
+	{
+		// Is blueboard button pressed?
+		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
+		{
+			// Yes, so turn LED on
+			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
+
+		}
+		else
+		{
+			// No, so turn LED off
+			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
+
+			
+		}
+		
+		// Is breadboard button pressed?
+		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
+			
+			// Yes, so turn LED on
+			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
+			
+			} else {
+			
+			// No, so turn LED off
+			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
+			
+		}
+	}
 	#endif
 }
