@@ -204,24 +204,41 @@ int main (void)
 	// configure EXT1_PIN_7
 	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
 	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-
+	
+	GPIO_INPUT_STATE_TYPE board_button_state = GPIO_INPUT_STATE_LOW;
+	LED_STATE_TYPE board_led_state = LED_STATE_OFF;
+	
 	while (1)
 	{
-		check_gpio_input_state(BUTTON_0_PIN);
 		// Check GPIO Input State for Button
+		board_button_state = check_gpio_input_state(BUTTON_0_PIN);
 		
 		// IF button_state is Falling Edge
-		//{
+		if (board_button_state == GPIO_INPUT_STATE_FALLING_EDGE)
+		{
 			// IF led_state is OFF
-			//{
+			if (board_led_state == LED_STATE_OFF)
+			{
 				// Turn LED on
-			//}
+				board_led_state = LED_STATE_ON;
+			}
 			
 			// IF led_state is ON
-			//{
+			else if (board_led_state == LED_STATE_ON)
+			{
 				// Turn LED off
-			//}
-		//}
+				board_led_state = LED_STATE_OFF;
+			}
+		}
+		
+		// Update LED power with state variable
+		if (board_led_state == LED_STATE_ON) {
+			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
+		} else {
+			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
+		}
+		
+		
 	}
 	#endif
 }
