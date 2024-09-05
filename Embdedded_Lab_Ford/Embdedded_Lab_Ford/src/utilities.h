@@ -52,8 +52,49 @@ GPIO_INPUT_STATE_TYPE check_gpio_input_state(int pin_number)
 	// updated by the logic of the function
 	GPIO_INPUT_STATE_TYPE gpio_input_state = GPIO_INPUT_STATE_LOW;
 	
-	// TODO: Add logic here
+	// Save the previous pin level as the current pin level
+	prev_pin_level[pin_number] = current_pin_level[pin_number];
 	
+	// Read GPIO Input Pin Level
+	current_pin_level[pin_number] = ioport_get_pin_level(pin_number);
+	
+	// GPIO Pin Level - IF Low
+	if (current_pin_level[pin_number] == PIN_LEVEL_LOW) 
+	{
+		// Check Previous Pin Level
+		// Previous Pin Level - IF Low
+		if (prev_pin_level[pin_number] == PIN_LEVEL_LOW) 
+		{
+			// GPIO Input State = LOW
+			gpio_input_state = GPIO_INPUT_STATE_LOW;
+			
+		// Previous Pin Level - IF High
+		}
+		else if (prev_pin_level[pin_number] == PIN_LEVEL_HIGH) 
+		{
+			// GPIO Input State = FALLING_EDGE
+			gpio_input_state = GPIO_INPUT_STATE_FALLING_EDGE;
+		}
+	}
+	
+	// GPIO Pin Level - IF High
+	else if (current_pin_level[pin_number] == PIN_LEVEL_HIGH) 
+	{
+		// Check Previous Pin Level
+		// Previous Pin Level - IF Low
+		if (prev_pin_level[pin_number] == PIN_LEVEL_LOW) 
+		{
+			// GPIO Input State = RISING_EDGE
+			gpio_input_state = GPIO_INPUT_STATE_RISING_EDGE;
+			
+		// Previous Pin Level - IF High
+		} 
+		else if (prev_pin_level[pin_number] == PIN_LEVEL_HIGH) 
+		{
+			// GPIO Input State = HIGH
+			gpio_input_state = GPIO_INPUT_STATE_HIGH;
+		}
+	}
 	return gpio_input_state;
 }
 
