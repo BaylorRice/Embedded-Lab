@@ -57,7 +57,12 @@ int main (void)
 		CLOCK	= 3
 	}STOPWATCH_STATE_MACHINE_TYPE;
 	
+	// Button State Variables
+	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
+	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
+	
 	while (1) {
+		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
 		
 	}
 
