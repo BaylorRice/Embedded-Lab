@@ -71,13 +71,13 @@ void display_clock_time(uint32_t ms_value) {
 	
 	time_var = (min * 100) + sec;
 	
-	char str[5];
+	char str[5] = "";
 	sprintf(str, "%d", time_var);
 	
 	c42412a_clear_all();
 	
 	if (str[3] == 0) {
-		char tmp[5];
+		char tmp[5] = "";
 		tmp[1] = str[0];
 		tmp[2] = str[1];
 		tmp[3] = str[2];
