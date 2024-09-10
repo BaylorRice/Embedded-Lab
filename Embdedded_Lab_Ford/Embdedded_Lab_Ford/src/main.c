@@ -75,10 +75,6 @@ int main (void)
 	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
 	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
 	
-	uint32_t test_value = 123456;
-	display_stopwatch_time(test_value);
-	return 0;
-	
 	while (1) {
 		// Check for input events
 		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
