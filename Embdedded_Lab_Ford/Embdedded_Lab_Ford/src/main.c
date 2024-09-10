@@ -63,7 +63,7 @@ int main (void)
 	
 	while (1) {
 		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
-		
+		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
 	}
 
 }
