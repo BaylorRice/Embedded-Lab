@@ -38,10 +38,13 @@
 #include "common.h"
 #include "utilities.h"
 
+// Display the ms time as ss.ms on the LCD
 void display_stopwatch_time(uint32_t ms_value) {
+	// Remove the last digit
 	uint32_t seconds = 0;
 	seconds = ms_value / 10;
 	
+	// Display modified time on LCD
 	c42412a_clear_all();
 	c42412a_show_numeric_dec(seconds);
 	if ((ms_value/100000) >= 1) {
