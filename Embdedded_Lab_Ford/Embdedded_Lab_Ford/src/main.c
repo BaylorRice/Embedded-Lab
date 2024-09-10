@@ -67,18 +67,42 @@ int main (void)
 		switch(stopwatch_state) {
 			case IDLE:
 			// IDLE Action here
+			
+			// IDLE State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				stopwatch_state = RUNNING;
+			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = CLOCK;
+			}
 			break;
 			
 			case RUNNING:
 			// RUNNING Action here
+			
+			// RUNNING State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				stopwatch_state = PAUSED;
+			}
 			break;
 			
 			case PAUSED:
 			// PAUSED Action here
+			
+			// PAUSED State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				stopwatch_state = RUNNING;
+			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = IDLE;
+			}
 			break;
 			
 			case CLOCK:
 			// CLOCK Action here
+			
+			// CLOCK State Changes
+			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = IDLE;
+			}
 			break;
 			
 			default:
