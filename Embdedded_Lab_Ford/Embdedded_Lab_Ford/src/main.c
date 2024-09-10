@@ -35,6 +35,7 @@
  */
 
 #include <asf.h>
+#include <stdio.h>
 #include "common.h"
 #include "utilities.h"
 
@@ -53,6 +54,29 @@ void display_stopwatch_time(uint32_t ms_value) {
 		c42412a_show_icon(C42412A_ICON_DOT_3);
 	}
 	
+}
+
+void display_clock_time(uint32_t ms_value) {
+	// Add time to make 0ms = 9min 3sec
+	ms_value = ms_value + 570000;
+	
+	// Define vars
+	uint32_t min = 0;
+	uint32_t sec = 0;
+	uint32_t time_var = 0;
+	
+	sec = ms_value/1000;
+	min = sec / 60;
+	sec = sec % 60;
+	
+	time_var = (min * 100) + sec;
+	
+	char str[4];
+	sprintf(str, "%d", time_var);
+	
+	c42412a_clear_all();
+	c42412a_show_text(str);
+	// TODO: This
 }
 
 int main (void)
@@ -77,6 +101,10 @@ int main (void)
 	// Button State Variables
 	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
 	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
+	
+	uint32_t test_value = 0;
+	display_clock_time(test_value);
+	return 0;
 	
 	while (1) {
 		// Check for input events
