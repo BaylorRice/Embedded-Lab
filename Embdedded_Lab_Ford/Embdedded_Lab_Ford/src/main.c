@@ -38,6 +38,20 @@
 #include "common.h"
 #include "utilities.h"
 
+void display_stopwatch_time(uint32_t ms_value) {
+	uint32_t seconds = 0;
+	seconds = ms_value / 10;
+	
+	c42412a_clear_all();
+	c42412a_show_numeric_dec(seconds);
+	if ((ms_value/100000) >= 1) {
+		c42412a_show_icon(C42412A_ICON_DOT_4);
+	} else {
+		c42412a_show_icon(C42412A_ICON_DOT_3);
+	}
+	
+}
+
 int main (void)
 {
 	board_init();
@@ -60,6 +74,10 @@ int main (void)
 	// Button State Variables
 	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
 	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
+	
+	uint32_t test_value = 123456;
+	display_stopwatch_time(test_value);
+	return 0;
 	
 	while (1) {
 		// Check for input events
