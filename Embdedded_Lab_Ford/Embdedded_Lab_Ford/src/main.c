@@ -41,10 +41,6 @@
 int main (void)
 {
 	board_init();
-	// configure BREADBOARD_LED_PIN
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
-	
 	// configure BREADBOARD_BUTTON_PIN
 	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
 	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
@@ -57,13 +53,38 @@ int main (void)
 		CLOCK	= 3
 	}STOPWATCH_STATE_MACHINE_TYPE;
 	
+	STOPWATCH_STATE_MACHINE_TYPE stopwatch_state = IDLE;
+	
 	// Button State Variables
 	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
 	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
 	
 	while (1) {
+		// Check for input events
 		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
 		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
+		
+		switch(stopwatch_state) {
+			case IDLE:
+			// IDLE Action here
+			break;
+			
+			case RUNNING:
+			// RUNNING Action here
+			break;
+			
+			case PAUSED:
+			// PAUSED Action here
+			break;
+			
+			case CLOCK:
+			// CLOCK Action here
+			break;
+			
+			default:
+			stopwatch_state = IDLE;
+			break;
+		}
 	}
 
 }
