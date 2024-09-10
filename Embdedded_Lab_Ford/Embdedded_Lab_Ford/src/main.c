@@ -41,6 +41,13 @@
 int main (void)
 {
 	board_init();
+	// configure BREADBOARD_LED_PIN
+	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
+	
+	// configure BREADBOARD_BUTTON_PIN
+	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
+	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
 	
 	// State machine state enumeration
 	typedef enum{
@@ -49,8 +56,6 @@ int main (void)
 		PAUSED	= 2,
 		CLOCK	= 3
 	}STOPWATCH_STATE_MACHINE_TYPE;
-	
-	// Variables
 	
 	while (1) {
 		
