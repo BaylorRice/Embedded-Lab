@@ -41,6 +41,8 @@
 int main (void)
 {
 	board_init();
+	c42412a_init();
+	
 	// configure BREADBOARD_BUTTON_PIN
 	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
 	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
@@ -67,7 +69,7 @@ int main (void)
 		switch(stopwatch_state) {
 			case IDLE:
 			// IDLE Action here
-			
+			c42412a_show_text("0");
 			// IDLE State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = RUNNING;
@@ -78,7 +80,7 @@ int main (void)
 			
 			case RUNNING:
 			// RUNNING Action here
-			
+			c42412a_show_text("1");
 			// RUNNING State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = PAUSED;
@@ -87,7 +89,7 @@ int main (void)
 			
 			case PAUSED:
 			// PAUSED Action here
-			
+			c42412a_show_text("2");
 			// PAUSED State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = RUNNING;
@@ -98,7 +100,7 @@ int main (void)
 			
 			case CLOCK:
 			// CLOCK Action here
-			
+			c42412a_show_text("3");
 			// CLOCK State Changes
 			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
 				stopwatch_state = IDLE;
