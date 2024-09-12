@@ -48,8 +48,10 @@ void display_stopwatch_time(uint32_t ms_value) {
 	// Display modified time on LCD
 	c42412a_show_numeric_dec(seconds);
 	if ((ms_value/100000) >= 1) {
+		c42412a_clear_icon(C42412A_ICON_DOT_3);
 		c42412a_show_icon(C42412A_ICON_DOT_4);
 	} else {
+		c42412a_clear_icon(C42412A_ICON_DOT_4);
 		c42412a_show_icon(C42412A_ICON_DOT_3);
 	}
 	
