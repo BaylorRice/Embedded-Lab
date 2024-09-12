@@ -129,7 +129,8 @@ int main (void)
 		
 		switch(stopwatch_state) {
 			case IDLE:
-			// IDLE Action here
+			/// IDLE Action
+			// Show a 0 and sync the stopwatch differential and tick count
 			c42412a_show_text("0");
 			stop_timestamp = ticks;
 			
@@ -142,8 +143,10 @@ int main (void)
 			break;
 			
 			case RUNNING:
-			// RUNNING Action here
+			/// RUNNING Action
+			// Set the stopwatch time
 			pause_tickcount = ticks - stop_timestamp;
+			// Display the stopwatch time
 			display_stopwatch_time(pause_tickcount);
 			
 			// RUNNING State Changes
@@ -153,11 +156,14 @@ int main (void)
 			break;
 			
 			case PAUSED:
-			// PAUSED Action here
+			/// PAUSED Action
+			// Display the stopwatch time WITHOUT updating it
 			display_stopwatch_time(pause_tickcount);
 			
 			// PAUSED State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				// When un-paused, change state and catch the stopwatch differential up based 
+				//	on the number of ticks that have passed since pause
 				stopwatch_state = RUNNING;
 				stop_timestamp = ticks - pause_tickcount;
 			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
@@ -167,7 +173,8 @@ int main (void)
 			break;
 			
 			case CLOCK:
-			// CLOCK Action here
+			/// CLOCK Action here
+			// display the current number of ticks (9:30 shift is hard coded in the function)
 			display_clock_time(ticks);
 			
 			// CLOCK State Changes
