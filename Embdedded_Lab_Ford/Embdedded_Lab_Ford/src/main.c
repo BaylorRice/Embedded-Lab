@@ -159,10 +159,11 @@ int main (void)
 			
 			case CLOCK:
 			// CLOCK Action here
-			c42412a_show_text("3");
+			display_clock_time(ticks);
 			// CLOCK State Changes
 			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
 				stopwatch_state = IDLE;
+				c42412a_clear_all();
 			}
 			break;
 			
