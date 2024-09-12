@@ -89,7 +89,7 @@
 #define CONFIG_PLL0_DIV             1
 
 //#define CONFIG_DFLL0_SOURCE         GENCLK_SRC_RCSYS
-//#define CONFIG_DFLL0_SOURCE         GENCLK_SRC_OSC32K
+#define CONFIG_DFLL0_SOURCE         GENCLK_SRC_OSC32K
 //#define CONFIG_DFLL0_SOURCE         GENCLK_SRC_RC32K
 
 /* Fdfll = (Fclk * DFLL_mul) / DFLL_div */

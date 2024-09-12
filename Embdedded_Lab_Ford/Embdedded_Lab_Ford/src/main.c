@@ -94,7 +94,14 @@ void display_clock_time(uint32_t ms_value) {
 int main (void)
 {
 	board_init();
+	sysclk_init();
 	c42412a_init();
+	
+	// Configure SysTick
+	uint32_t ms_length = 0;
+	uint32_t freq = sysclk_get_cpu_hz();
+	ms_length = 0.001/(1.0/(double)freq);
+	SysTick_Config(ms_length);
 	
 	// configure BREADBOARD_BUTTON_PIN
 	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
