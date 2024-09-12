@@ -131,6 +131,8 @@ int main (void)
 			case IDLE:
 			// IDLE Action here
 			c42412a_show_text("0");
+			stop_timestamp = ticks;
+			
 			// IDLE State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = RUNNING;
@@ -152,12 +154,15 @@ int main (void)
 			
 			case PAUSED:
 			// PAUSED Action here
-			c42412a_show_text("2");
+			display_stopwatch_time(pause_tickcount);
+			
 			// PAUSED State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = RUNNING;
+				stop_timestamp = ticks - pause_tickcount;
 			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
 				stopwatch_state = IDLE;
+				c42412a_clear_all();
 			}
 			break;
 			
