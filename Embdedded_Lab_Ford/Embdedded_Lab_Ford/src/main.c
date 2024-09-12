@@ -1,9 +1,10 @@
 /**
  * Embedded Lab - Atmel
+ * Lab A2 - Stopwatch State Machine
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Sept 04, 2024
- * Last Commit: f0d50f28c03cbb7aadd30c449d86398295d9506e
+ * Modified: Sept 12, 2024
+ * Last Commit: ab6823e8a6caf148fbb232ca3bec1b164adbdd5e
  */
 
 /**
@@ -34,243 +35,160 @@
  */
 
 #include <asf.h>
+#include <stdio.h>
 #include "common.h"
 #include "utilities.h"
 
-//#define ONE_BUTTON_TWO_LED
-//#define TWO_BUTTON_TWO_LED
-//#define DOUBLE_FLASHLIGHT_REESE
-#define DOUBLE_FLASHLIGHT
+// Display the ms time as ss.ms on the LCD
+void display_stopwatch_time(uint32_t ms_value) {
+	// Remove the last digit
+	uint32_t seconds = 0;
+	seconds = ms_value / 10;
+	
+	// Display modified time on LCD
+	c42412a_show_numeric_dec(seconds);
+	if ((ms_value/100000) >= 1) {
+		c42412a_clear_icon(C42412A_ICON_DOT_3);
+		c42412a_show_icon(C42412A_ICON_DOT_4);
+	} else {
+		c42412a_clear_icon(C42412A_ICON_DOT_4);
+		c42412a_show_icon(C42412A_ICON_DOT_3);
+	}
+	
+}
+
+void display_clock_time(uint32_t ms_value) {
+	// Add time to make 0ms = 9min 3sec
+	ms_value = ms_value + 570000;
+	
+	// Define vars
+	uint32_t min = 0;
+	uint32_t sec = 0;
+	uint32_t time_var = 0;
+	
+	sec = ms_value/1000;
+	min = sec / 60;
+	sec = sec % 60;
+	
+	time_var = (min * 100) + sec;
+	
+	char str[5] = "";
+	sprintf(str, "%d", time_var);
+	
+	if (str[3] == 0) {
+		char tmp[5] = "";
+		tmp[1] = str[0];
+		tmp[2] = str[1];
+		tmp[3] = str[2];
+		tmp[0] = 48;
+		c42412a_show_text(tmp);
+	} else {
+		c42412a_show_text(str);
+	}
+	
+	// TODO: This
+	c42412a_show_icon(C42412A_ICON_COLON);
+}
 
 int main (void)
 {
 	board_init();
-	#ifdef ONE_BUTTON_TWO_LED
-	// configure BREADBOARD_LED_PIN
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
+	sysclk_init();
+	c42412a_init();
 	
-	// configure EXT1_PIN_7
-	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-
-	while (1)
-	{
-		// Is button pressed?
-		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
-		{
-			// Yes, so turn LED on
-			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-
-			// Yes, so set EXT1_PIN_6 to same value as LED
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-
-		}
-		else
-		{
-			// No, so turn LED off
-			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-
-			// Yes, so set EXT1_PIN_6 to same value as LED
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
-		}
-	}
-	#endif
+	// Configure SysTick
+	uint32_t ms_length = 0;
+	uint32_t freq = sysclk_get_cpu_hz();
+	ms_length = 0.001/(1.0/(double)freq);
+	SysTick_Config(ms_length);
+	uint32_t stop_timestamp = 0;
+	uint32_t pause_tickcount = 0;
 	
-	#ifdef TWO_BUTTON_TWO_LED
-	// configure BREADBOARD_LED_PIN
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
+	// configure BREADBOARD_BUTTON_PIN
+	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
+	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
 	
-	// configure EXT1_PIN_7
-	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-
-	while (1)
-	{
-		// Is blueboard button pressed?
-		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
-		{
-			// Yes, so turn LED on
-			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);	
-
-		}
-		else
-		{
-			// No, so turn LED off
-			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-
-			
-		}
+	// State machine state enumeration
+	typedef enum{
+		IDLE	= 0,
+		RUNNING = 1,
+		PAUSED	= 2,
+		CLOCK	= 3
+	}STOPWATCH_STATE_MACHINE_TYPE;
+	
+	STOPWATCH_STATE_MACHINE_TYPE stopwatch_state = IDLE;
+	
+	// Button State Variables
+	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
+	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
+	
+	while (1) {
+		// Check for input events
+		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
+		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
 		
-		// Is breadboard button pressed?
-		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
+		switch(stopwatch_state) {
+			case IDLE:
+			/// IDLE Action
+			// Show a 0 and sync the stopwatch differential and tick count
+			c42412a_show_text("0");
+			stop_timestamp = ticks;
 			
-			// Yes, so turn LED on
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-			
-		} else {
-			
-			// No, so turn LED off
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
-			
-		}
-	}
-	#endif
-	
-	#ifdef DOUBLE_FLASHLIGHT_REESE
-	// configure BREADBOARD_LED_PIN
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
-	
-	// configure EXT1_PIN_7
-	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-
-	// define hold and power variables
-	bool board_letgo = true;
-	bool bread_letgo = true;
-	bool board_led_power = false;
-	bool bread_led_power = false;
-
-	while (1)
-	{
-		// On blueboard button press, toggle led_power
-		if (ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE) {
-			
-			// If the button was just pressed, toggle power
-			if (board_letgo) {
-				board_led_power = !board_led_power;
-				
-				// Set the check variable to false, telling the program the button was NOT just pressed
-				board_letgo = false;
+			// IDLE State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				stopwatch_state = RUNNING;
+			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = CLOCK;
 			}
-		
-		// If the button was let go, change back the check variable
-		} else {
-			board_letgo = true;
-		}
-		
-		
-		// Is board_led_power true?
-		if (board_led_power)
-		{
-			// Yes, so turn LED on
-			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-		}
-		else
-		{
-			// No, so turn LED off
-			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-		}
-		
-		// On breadboard button press, toggle led_power
-		if (ioport_get_pin_level(BREADBOARD_BUTTON_PIN) == BREADBOARD_BUTTON_ACIVE) {
+			break;
 			
-			// If the button was just pressed, toggle power
-			if (bread_letgo) {
-				bread_led_power = !bread_led_power;
-				
-				// Set the check variable to false, telling the program the button was NOT just pressed
-				bread_letgo = false;
+			case RUNNING:
+			/// RUNNING Action
+			// Set the stopwatch time
+			pause_tickcount = ticks - stop_timestamp;
+			// Display the stopwatch time
+			display_stopwatch_time(pause_tickcount);
+			
+			// RUNNING State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				stopwatch_state = PAUSED;
 			}
-		
-		// If the button was let go, change back the check variable
-		} else {
-			bread_letgo = true;
-		}
-		
-		
-		// Is bread_led_power true?
-		if (bread_led_power)
-		{
-			// Yes, so turn LED on
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-		}
-		else
-		{
-			// No, so turn LED off
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
+			break;
+			
+			case PAUSED:
+			/// PAUSED Action
+			// Display the stopwatch time WITHOUT updating it
+			display_stopwatch_time(pause_tickcount);
+			
+			// PAUSED State Changes
+			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+				// When un-paused, change state and catch the stopwatch differential up based 
+				//	on the number of ticks that have passed since pause
+				stopwatch_state = RUNNING;
+				stop_timestamp = ticks - pause_tickcount;
+			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = IDLE;
+				c42412a_clear_all();
+			}
+			break;
+			
+			case CLOCK:
+			/// CLOCK Action here
+			// display the current number of ticks (9:30 shift is hard coded in the function)
+			display_clock_time(ticks);
+			
+			// CLOCK State Changes
+			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+				stopwatch_state = IDLE;
+				c42412a_clear_all();
+			}
+			break;
+			
+			default:
+			stopwatch_state = IDLE;
+			c42412a_clear_all();
+			break;
 		}
 	}
 
-	#endif
-	
-	#ifdef DOUBLE_FLASHLIGHT // See commit 98f0773d55e31ef66a2609b0989ffe9f29544dce for assumed edge-detecting method
-	// configure BREADBOARD_LED_PIN
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, LED_0_INACTIVE);
-	
-	// configure EXT1_PIN_7
-	ioport_set_pin_dir(EXT1_PIN_7, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(EXT1_PIN_7, IOPORT_MODE_PULLDOWN);
-	
-	GPIO_INPUT_STATE_TYPE board_button_state = GPIO_INPUT_STATE_LOW;
-	GPIO_INPUT_STATE_TYPE bread_button_state = GPIO_INPUT_STATE_LOW;
-	LED_STATE_TYPE board_led_state = LED_STATE_OFF;
-	LED_STATE_TYPE bread_led_state = LED_STATE_OFF;
-	
-	while (1)
-	{
-		/// Blue Board LED
-		// Check GPIO Input State for Button
-		board_button_state = check_gpio_input_state(BUTTON_0_PIN);
-		
-		// IF button_state is Falling Edge
-		if (board_button_state == GPIO_INPUT_STATE_FALLING_EDGE)
-		{
-			// IF led_state is OFF
-			if (board_led_state == LED_STATE_OFF)
-			{
-				// Turn LED on
-				board_led_state = LED_STATE_ON;
-			}
-			
-			// IF led_state is ON
-			else if (board_led_state == LED_STATE_ON)
-			{
-				// Turn LED off
-				board_led_state = LED_STATE_OFF;
-			}
-		}
-		
-		// Update LED power with state variable
-		if (board_led_state == LED_STATE_ON) {
-			ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-		} else {
-			ioport_set_pin_level(LED_0_PIN, !LED_0_ACTIVE);
-		}
-		
-		/// Bread Board LED
-		// Check GPIO Input State for Button
-		bread_button_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
-		
-		// IF button_state is Falling Edge
-		if (bread_button_state == GPIO_INPUT_STATE_RISING_EDGE)
-		{
-			// IF led_state is OFF
-			if (bread_led_state == LED_STATE_OFF)
-			{
-				// Turn LED on
-				bread_led_state = LED_STATE_ON;
-			}
-			
-			// IF led_state is ON
-			else if (bread_led_state == LED_STATE_ON)
-			{
-				// Turn LED off
-				bread_led_state = LED_STATE_OFF;
-			}
-		}
-		
-		// Update LED power with state variable
-		if (bread_led_state == LED_STATE_ON) {
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-			} else {
-			ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
-		}
-		
-		
-	}
-	#endif
 }
