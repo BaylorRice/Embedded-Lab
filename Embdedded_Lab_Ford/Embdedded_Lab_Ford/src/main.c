@@ -101,6 +101,8 @@ int main (void)
 	uint32_t freq = sysclk_get_cpu_hz();
 	ms_length = 0.001/(1.0/(double)freq);
 	SysTick_Config(ms_length);
+	uint32_t stop_timestamp = 0;
+	uint32_t pause_tickcount = 0;
 	
 	// configure BREADBOARD_BUTTON_PIN
 	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
@@ -139,7 +141,9 @@ int main (void)
 			
 			case RUNNING:
 			// RUNNING Action here
-			c42412a_show_text("1");
+			pause_tickcount = ticks - stop_timestamp;
+			display_stopwatch_time(pause_tickcount);
+			
 			// RUNNING State Changes
 			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
 				stopwatch_state = PAUSED;
