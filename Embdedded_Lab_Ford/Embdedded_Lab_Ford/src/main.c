@@ -179,6 +179,7 @@ int main (void)
 			
 			default:
 			stopwatch_state = IDLE;
+			c42412a_clear_all();
 			break;
 		}
 	}
