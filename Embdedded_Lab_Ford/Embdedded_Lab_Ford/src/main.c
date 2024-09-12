@@ -122,55 +122,57 @@ int main (void)
 	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
 	
 	while (1) {
-		// Check for input events
-		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
-		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
+		display_stopwatch_time(ticks);
 		
-		switch(stopwatch_state) {
-			case IDLE:
-			// IDLE Action here
-			c42412a_show_text("0");
-			// IDLE State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = RUNNING;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = CLOCK;
-			}
-			break;
-			
-			case RUNNING:
-			// RUNNING Action here
-			c42412a_show_text("1");
-			// RUNNING State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = PAUSED;
-			}
-			break;
-			
-			case PAUSED:
-			// PAUSED Action here
-			c42412a_show_text("2");
-			// PAUSED State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = RUNNING;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-			}
-			break;
-			
-			case CLOCK:
-			// CLOCK Action here
-			c42412a_show_text("3");
-			// CLOCK State Changes
-			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-			}
-			break;
-			
-			default:
-			stopwatch_state = IDLE;
-			break;
-		}
+// 		Check for input events
+// 				sw0_state = check_gpio_input_state(BUTTON_0_PIN);
+// 				sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
+// 				
+// 				switch(stopwatch_state) {
+// 					case IDLE:
+// 					// IDLE Action here
+// 					c42412a_show_text("0");
+// 					// IDLE State Changes
+// 					if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+// 						stopwatch_state = RUNNING;
+// 					} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+// 						stopwatch_state = CLOCK;
+// 					}
+// 					break;
+// 					
+// 					case RUNNING:
+// 					// RUNNING Action here
+// 					c42412a_show_text("1");
+// 					// RUNNING State Changes
+// 					if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+// 						stopwatch_state = PAUSED;
+// 					}
+// 					break;
+// 					
+// 					case PAUSED:
+// 					// PAUSED Action here
+// 					c42412a_show_text("2");
+// 					// PAUSED State Changes
+// 					if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
+// 						stopwatch_state = RUNNING;
+// 					} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+// 						stopwatch_state = IDLE;
+// 					}
+// 					break;
+// 					
+// 					case CLOCK:
+// 					// CLOCK Action here
+// 					c42412a_show_text("3");
+// 					// CLOCK State Changes
+// 					if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
+// 						stopwatch_state = IDLE;
+// 					}
+// 					break;
+// 					
+// 					default:
+// 					stopwatch_state = IDLE;
+// 					break;
+// 				}
 	}
 
 }
