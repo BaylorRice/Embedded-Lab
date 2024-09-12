@@ -46,7 +46,6 @@ void display_stopwatch_time(uint32_t ms_value) {
 	seconds = ms_value / 10;
 	
 	// Display modified time on LCD
-	c42412a_clear_all();
 	c42412a_show_numeric_dec(seconds);
 	if ((ms_value/100000) >= 1) {
 		c42412a_show_icon(C42412A_ICON_DOT_4);
@@ -73,8 +72,6 @@ void display_clock_time(uint32_t ms_value) {
 	
 	char str[5] = "";
 	sprintf(str, "%d", time_var);
-	
-	c42412a_clear_all();
 	
 	if (str[3] == 0) {
 		char tmp[5] = "";
