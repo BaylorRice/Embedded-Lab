@@ -6,6 +6,7 @@
 #include "utilities_lcd.h"
 #include "utilities_light_sensor.h"
 #include "utilities_eic.h"
+#include "utilities_tc.h"
 
 // create function prototypes based on the function definitions below
 GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);

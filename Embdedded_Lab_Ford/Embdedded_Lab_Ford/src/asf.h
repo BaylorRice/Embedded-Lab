@@ -100,6 +100,9 @@
 // From module: System Clock Control - SAM4L implementation
 #include <sysclk.h>
 
+// From module: TC - Timer Counter
+#include <tc.h>
+
 // From module: WDT - Watchdog Timer
 #include <wdt_sam4l.h>
 
