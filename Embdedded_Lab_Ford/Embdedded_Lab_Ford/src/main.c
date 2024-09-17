@@ -43,8 +43,6 @@ void display_clock_time(uint32_t);
 
 #include "common.h"
 #include "utilities.h"
-#include "utilities_lcd.h"
-#include "utilities_light_sensor.h"
 
 // Display the ms time as ss.ms on the LCD
 void display_stopwatch_time(uint32_t ms_value) {
