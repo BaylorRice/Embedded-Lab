@@ -99,5 +99,6 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
+	c42412a_init();
 	eic_setup();
 }
