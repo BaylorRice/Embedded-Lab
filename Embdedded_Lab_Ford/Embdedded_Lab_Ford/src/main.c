@@ -99,7 +99,5 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
-	c42412a_init();
-	configure_lcd_backlight();
-	configure_light_sensor();
+	eic_setup();
 }

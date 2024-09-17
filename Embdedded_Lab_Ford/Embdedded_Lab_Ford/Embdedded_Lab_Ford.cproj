@@ -587,6 +587,9 @@
     <None Include="src\ASF\sam\drivers\gpio\gpio.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="src\utilities_eic.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\utilities_lcd.h">
       <SubType>compile</SubType>
     </Compile>
