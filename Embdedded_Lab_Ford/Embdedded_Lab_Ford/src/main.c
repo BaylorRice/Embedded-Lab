@@ -36,6 +36,11 @@
 
 #include <asf.h>
 #include <stdio.h>
+
+// Defining function prototypes so systick can use them
+void display_stopwatch_time(uint32_t);
+void display_clock_time(uint32_t);
+
 #include "common.h"
 #include "utilities.h"
 
@@ -92,5 +97,8 @@ void display_clock_time(uint32_t ms_value) {
 
 int main (void)
 {
-
+	board_init();
+	sysclk_init();
+	c42412a_init();
+	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 }
