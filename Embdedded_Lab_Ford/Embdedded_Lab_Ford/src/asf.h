@@ -56,6 +56,9 @@
 #include <compiler.h>
 #include <status_codes.h>
 
+// From module: EIC - External Interrupt Controller
+#include <eic.h>
+
 // From module: FLASHCALW Controller Software Driver
 #include <flashcalw.h>
 
