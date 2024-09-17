@@ -18,6 +18,13 @@ void configure_light_sensor() {
 	
 }
 
+volatile LCD_BACKLIGHT_TYPE backlight_level = LCD_BACKLIGHT_OFF;
 void light_sensor_handler() {
+	if (backlight_level == LCD_BACKLIGHT_OFF) {
+		backlight_level = LCD_BACKLIGHT_ON;
+	} else if (backlight_level == LCD_BACKLIGHT_ON) {
+		backlight_level = LCD_BACKLIGHT_OFF;
+	}
 	
+	set_lcd_backlight(backlight_level);
 }
