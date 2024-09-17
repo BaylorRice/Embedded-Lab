@@ -1,9 +1,9 @@
 /**
  * Embedded Lab - Atmel
- * Lab A2 - Stopwatch State Machine
+ * Lab A3 - Event Driven System
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Sept 12, 2024
+ * Modified: Sept 17, 2024
  * Last Commit: ab6823e8a6caf148fbb232ca3bec1b164adbdd5e
  */
 
@@ -92,103 +92,5 @@ void display_clock_time(uint32_t ms_value) {
 
 int main (void)
 {
-	board_init();
-	sysclk_init();
-	c42412a_init();
-	
-	// Configure SysTick
-	uint32_t ms_length = 0;
-	uint32_t freq = sysclk_get_cpu_hz();
-	ms_length = 0.001/(1.0/(double)freq);
-	SysTick_Config(ms_length);
-	uint32_t stop_timestamp = 0;
-	uint32_t pause_tickcount = 0;
-	
-	// configure BREADBOARD_BUTTON_PIN
-	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
-	
-	// State machine state enumeration
-	typedef enum{
-		IDLE	= 0,
-		RUNNING = 1,
-		PAUSED	= 2,
-		CLOCK	= 3
-	}STOPWATCH_STATE_MACHINE_TYPE;
-	
-	STOPWATCH_STATE_MACHINE_TYPE stopwatch_state = IDLE;
-	
-	// Button State Variables
-	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
-	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
-	
-	while (1) {
-		// Check for input events
-		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
-		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
-		
-		switch(stopwatch_state) {
-			case IDLE:
-			/// IDLE Action
-			// Show a 0 and sync the stopwatch differential and tick count
-			c42412a_show_text("0");
-			stop_timestamp = ticks;
-			
-			// IDLE State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = RUNNING;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = CLOCK;
-			}
-			break;
-			
-			case RUNNING:
-			/// RUNNING Action
-			// Set the stopwatch time
-			pause_tickcount = ticks - stop_timestamp;
-			// Display the stopwatch time
-			display_stopwatch_time(pause_tickcount);
-			
-			// RUNNING State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = PAUSED;
-			}
-			break;
-			
-			case PAUSED:
-			/// PAUSED Action
-			// Display the stopwatch time WITHOUT updating it
-			display_stopwatch_time(pause_tickcount);
-			
-			// PAUSED State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				// When un-paused, change state and catch the stopwatch differential up based 
-				//	on the number of ticks that have passed since pause
-				stopwatch_state = RUNNING;
-				stop_timestamp = ticks - pause_tickcount;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-				c42412a_clear_all();
-			}
-			break;
-			
-			case CLOCK:
-			/// CLOCK Action here
-			// display the current number of ticks (9:30 shift is hard coded in the function)
-			display_clock_time(ticks);
-			
-			// CLOCK State Changes
-			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-				c42412a_clear_all();
-			}
-			break;
-			
-			default:
-			stopwatch_state = IDLE;
-			c42412a_clear_all();
-			break;
-		}
-	}
 
 }
