@@ -571,6 +571,9 @@
     <Folder Include="src\config\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\utilities_lcd.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\ASF\sam\drivers\lcdca\example\lcdca_example.h">
       <SubType>compile</SubType>
     </None>

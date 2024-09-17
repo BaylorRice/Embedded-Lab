@@ -43,6 +43,7 @@ void display_clock_time(uint32_t);
 
 #include "common.h"
 #include "utilities.h"
+#include "utilities_lcd.h"
 
 // Display the ms time as ss.ms on the LCD
 void display_stopwatch_time(uint32_t ms_value) {
@@ -99,6 +100,6 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
-	c42412a_init();
-	SysTick_Config(sysclk_get_cpu_hz() / 1000);
+	configure_lcd_backlight();
+	set_lcd_backlight(LCD_BACKLIGHT_OFF);
 }

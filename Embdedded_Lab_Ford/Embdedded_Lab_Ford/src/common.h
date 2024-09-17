@@ -38,6 +38,11 @@ typedef enum{
 	LED_STATE_ON  = 1
 }LED_STATE_TYPE;
 
-
+// LCD Backlight
+#define LCD_BACKLIGHT_PIN PIN_PC05
+typedef enum{
+	LCD_BACKLIGHT_OFF = 0,
+	LCD_BACKLIGHT_ON = 1
+}LCD_BACKLIGHT_TYPE;
 
 #endif /* COMMON_H_ */
