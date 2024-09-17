@@ -8,6 +8,9 @@
 #include "common.h"
 #include "utilities.h"
 
+/// SW0 Interrupt Handler
+//		Turn on Wireless signal icon
+//		Once the button is let go, turn it off
 void eic_callback() {
 	if (eic_line_interrupt_is_pending(EIC, GPIO_PUSH_BUTTON_EIC_LINE)) {
 		eic_line_clear_interrupt(EIC, GPIO_PUSH_BUTTON_EIC_LINE);
@@ -24,6 +27,7 @@ void eic_callback() {
 	c42412a_clear_icon(C42412A_ICON_WLESS_LEVEL_3);
 }
 
+// Configure the SW0 button EIC Interrupt
 void eic_setup() {
 	eic_enable(EIC);
 	

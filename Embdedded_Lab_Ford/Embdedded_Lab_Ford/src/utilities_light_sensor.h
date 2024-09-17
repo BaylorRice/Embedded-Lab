@@ -11,6 +11,7 @@
 
 void light_sensor_handler();
 
+// Configure the Light Sensor and the GPIO Interrupt
 void configure_light_sensor() {
 	ioport_set_pin_dir(LIGHT_SENSOR_PIN, IOPORT_DIR_INPUT);
 	gpio_set_pin_callback(LIGHT_SENSOR_PIN, light_sensor_handler, 1);
@@ -18,6 +19,8 @@ void configure_light_sensor() {
 	
 }
 
+/// Light Sensor Interrupt Handler
+//		Toggle the LCD Backlight
 volatile LCD_BACKLIGHT_TYPE backlight_level = LCD_BACKLIGHT_OFF;
 void light_sensor_handler() {
 	if (backlight_level == LCD_BACKLIGHT_OFF) {

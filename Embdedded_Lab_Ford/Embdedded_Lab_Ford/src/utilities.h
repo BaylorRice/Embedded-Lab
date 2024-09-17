@@ -103,6 +103,7 @@ GPIO_INPUT_STATE_TYPE check_gpio_input_state(int pin_number)
 	return gpio_input_state;
 }
 
+// Stopwatch
 volatile uint32_t ticks = 0;
 void SysTick_Handler(){
 	ticks++;
