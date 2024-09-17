@@ -45,4 +45,7 @@ typedef enum{
 	LCD_BACKLIGHT_ON = 1
 }LCD_BACKLIGHT_TYPE;
 
+// Light Sensor
+#define LIGHT_SENSOR_PIN EXT2_PIN_3
+
 #endif /* COMMON_H_ */
