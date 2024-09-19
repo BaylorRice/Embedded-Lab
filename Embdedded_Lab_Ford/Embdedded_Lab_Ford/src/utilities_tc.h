@@ -17,7 +17,7 @@
 static void configure_tc(void)
 {
 	// DONE: initialize ul_tcclks to a value that selects a valid timer counter clock
-	uint32_t ul_tcclks = 2;
+	uint32_t ul_tcclks = 1;
 	// get clock speed
 	uint32_t ul_sysclk = sysclk_get_pba_hz();
 	//TCO Config
