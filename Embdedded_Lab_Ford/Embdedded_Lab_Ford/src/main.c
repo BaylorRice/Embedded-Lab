@@ -102,4 +102,5 @@ int main (void)
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	configure_lcd_backlight();
 	configure_light_sensor();
+	eic_setup();
 }
