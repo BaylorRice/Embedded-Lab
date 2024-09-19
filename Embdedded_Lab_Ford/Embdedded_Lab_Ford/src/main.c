@@ -103,4 +103,7 @@ int main (void)
 	configure_lcd_backlight();
 	configure_light_sensor();
 	eic_setup();
+	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
+	configure_tc();
 }
