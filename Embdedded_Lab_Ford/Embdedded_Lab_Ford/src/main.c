@@ -98,6 +98,8 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
-	configure_tc();
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
+	c42412a_init();
+	SysTick_Config(sysclk_get_cpu_hz() / 1000);
+	configure_lcd_backlight();
+	configure_light_sensor();
 }
