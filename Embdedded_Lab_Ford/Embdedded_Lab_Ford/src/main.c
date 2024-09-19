@@ -97,12 +97,20 @@ void display_clock_time(uint32_t ms_value) {
 int main (void)
 {
 	board_init();
+	
+	// Clock
 	sysclk_init();
 	c42412a_init();
 	SysTick_Config(sysclk_get_cpu_hz() / 1000);
+	
+	// Backlight Toggle
 	configure_lcd_backlight();
 	configure_light_sensor();
+	
+	// Wireless Icon
 	eic_setup();
+	
+	// Breadboard LED Dim
 	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
 	ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
 	configure_tc();
