@@ -56,8 +56,14 @@
 #include <compiler.h>
 #include <status_codes.h>
 
+// From module: EIC - External Interrupt Controller
+#include <eic.h>
+
 // From module: FLASHCALW Controller Software Driver
 #include <flashcalw.h>
+
+// From module: GPIO - General-Purpose Input/Output
+#include <gpio.h>
 
 // From module: Generic board support
 #include <board.h>
@@ -93,6 +99,9 @@
 
 // From module: System Clock Control - SAM4L implementation
 #include <sysclk.h>
+
+// From module: TC - Timer Counter
+#include <tc.h>
 
 // From module: WDT - Watchdog Timer
 #include <wdt_sam4l.h>

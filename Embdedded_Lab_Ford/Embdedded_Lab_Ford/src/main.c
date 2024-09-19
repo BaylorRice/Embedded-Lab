@@ -1,10 +1,10 @@
 /**
  * Embedded Lab - Atmel
- * Lab A2 - Stopwatch State Machine
+ * Lab A3 - Event Driven System
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Sept 12, 2024
- * Last Commit: ab6823e8a6caf148fbb232ca3bec1b164adbdd5e
+ * Modified: Sept 19, 2024
+ * Last Commit: 5629f21a641f74a1b46c2d2eba85667cbba007c9
  */
 
 /**
@@ -36,6 +36,11 @@
 
 #include <asf.h>
 #include <stdio.h>
+
+// Defining function prototypes so systick can use them
+void display_stopwatch_time(uint32_t);
+void display_clock_time(uint32_t);
+
 #include "common.h"
 #include "utilities.h"
 
@@ -86,7 +91,6 @@ void display_clock_time(uint32_t ms_value) {
 		c42412a_show_text(str);
 	}
 	
-	// TODO: This
 	c42412a_show_icon(C42412A_ICON_COLON);
 }
 
@@ -94,101 +98,47 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
+	SysTick_Config(sysclk_get_cpu_hz() / 1000); // One tick = 1ms
+	
+	// LED0 Delay
+	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
+	mdelay(3000);
+	ioport_set_pin_level(LED_0_PIN, LED_0_INACTIVE);
+	mdelay(3000);
+	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
+	
+	// Clock
 	c42412a_init();
 	
-	// Configure SysTick
-	uint32_t ms_length = 0;
-	uint32_t freq = sysclk_get_cpu_hz();
-	ms_length = 0.001/(1.0/(double)freq);
-	SysTick_Config(ms_length);
-	uint32_t stop_timestamp = 0;
-	uint32_t pause_tickcount = 0;
-	
-	// configure BREADBOARD_BUTTON_PIN
-	ioport_set_pin_dir(BREADBOARD_BUTTON_PIN, IOPORT_DIR_INPUT);
-	ioport_set_pin_mode(BREADBOARD_BUTTON_PIN, IOPORT_MODE_PULLDOWN);
-	
-	// State machine state enumeration
-	typedef enum{
-		IDLE	= 0,
-		RUNNING = 1,
-		PAUSED	= 2,
-		CLOCK	= 3
-	}STOPWATCH_STATE_MACHINE_TYPE;
-	
-	STOPWATCH_STATE_MACHINE_TYPE stopwatch_state = IDLE;
-	
-	// Button State Variables
-	GPIO_INPUT_STATE_TYPE sw0_state = GPIO_INPUT_STATE_HIGH;
-	GPIO_INPUT_STATE_TYPE sw1_state = GPIO_INPUT_STATE_LOW;
-	
-	while (1) {
-		// Check for input events
-		sw0_state = check_gpio_input_state(BUTTON_0_PIN);
-		sw1_state = check_gpio_input_state(BREADBOARD_BUTTON_PIN);
-		
-		switch(stopwatch_state) {
-			case IDLE:
-			/// IDLE Action
-			// Show a 0 and sync the stopwatch differential and tick count
-			c42412a_show_text("0");
-			stop_timestamp = ticks;
-			
-			// IDLE State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = RUNNING;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = CLOCK;
-			}
-			break;
-			
-			case RUNNING:
-			/// RUNNING Action
-			// Set the stopwatch time
-			pause_tickcount = ticks - stop_timestamp;
-			// Display the stopwatch time
-			display_stopwatch_time(pause_tickcount);
-			
-			// RUNNING State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				stopwatch_state = PAUSED;
-			}
-			break;
-			
-			case PAUSED:
-			/// PAUSED Action
-			// Display the stopwatch time WITHOUT updating it
-			display_stopwatch_time(pause_tickcount);
-			
-			// PAUSED State Changes
-			if (sw0_state == GPIO_INPUT_STATE_FALLING_EDGE) {
-				// When un-paused, change state and catch the stopwatch differential up based 
-				//	on the number of ticks that have passed since pause
-				stopwatch_state = RUNNING;
-				stop_timestamp = ticks - pause_tickcount;
-			} else if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-				c42412a_clear_all();
-			}
-			break;
-			
-			case CLOCK:
-			/// CLOCK Action here
-			// display the current number of ticks (9:30 shift is hard coded in the function)
-			display_clock_time(ticks);
-			
-			// CLOCK State Changes
-			if (sw1_state == GPIO_INPUT_STATE_RISING_EDGE) {
-				stopwatch_state = IDLE;
-				c42412a_clear_all();
-			}
-			break;
-			
-			default:
-			stopwatch_state = IDLE;
-			c42412a_clear_all();
-			break;
-		}
+	// Backlight Toggle
+	configure_lcd_backlight();
+	configure_light_sensor();
+	if (ioport_get_pin_level(LIGHT_SENSOR_PIN) == 1) {
+		backlight_level = LCD_BACKLIGHT_ON;
+		set_lcd_backlight(LCD_BACKLIGHT_ON);
+	} else {
+		backlight_level = LCD_BACKLIGHT_OFF;
+		set_lcd_backlight(LCD_BACKLIGHT_OFF);
 	}
-
+	
+	// Wireless Icon
+	eic_setup();
+	
+	// Breadboard LED Dim
+	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
+	configure_tc();
+	
+	// Configure Priorities
+	NVIC_SetPriority(EIC_1_IRQn, 4);
+	NVIC_SetPriority(SysTick_IRQn, 1);
+	NVIC_SetPriority(GPIO_0_IRQn, 2);
+	NVIC_SetPriority(TC00_IRQn, 3);
+	
+	uint32_t eic_prio = NVIC_GetPriority(EIC_1_IRQn);
+	uint32_t systick_prio = NVIC_GetPriority(SysTick_IRQn);
+	uint32_t gpio_prio = NVIC_GetPriority(GPIO_0_IRQn);
+	uint32_t tc_prio = NVIC_GetPriority(TC00_IRQn);
+	
+	
 }

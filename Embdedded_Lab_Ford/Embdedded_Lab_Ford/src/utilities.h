@@ -3,6 +3,11 @@
 
 #include "common.h"
 
+#include "utilities_lcd.h"
+#include "utilities_light_sensor.h"
+#include "utilities_eic.h"
+#include "utilities_tc.h"
+
 // create function prototypes based on the function definitions below
 GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);
 
@@ -98,9 +103,19 @@ GPIO_INPUT_STATE_TYPE check_gpio_input_state(int pin_number)
 	return gpio_input_state;
 }
 
+// Stopwatch
 volatile uint32_t ticks = 0;
 void SysTick_Handler(){
 	ticks++;
+	display_stopwatch_time(ticks);
+}
+
+// Delay
+static void mdelay(uint32_t delay_ms) {
+	uint32_t timestamp = ticks;
+	while (ticks < (timestamp+delay_ms)){
+		
+	}
 }
 
 #endif /* UTILITIES_H_ */
