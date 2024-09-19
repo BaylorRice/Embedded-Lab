@@ -113,6 +113,13 @@ int main (void)
 	// Backlight Toggle
 	configure_lcd_backlight();
 	configure_light_sensor();
+	if (ioport_get_pin_level(LIGHT_SENSOR_PIN) == 1) {
+		backlight_level = LCD_BACKLIGHT_ON;
+		set_lcd_backlight(LCD_BACKLIGHT_ON);
+	} else {
+		backlight_level = LCD_BACKLIGHT_OFF;
+		set_lcd_backlight(LCD_BACKLIGHT_OFF);
+	}
 	
 	// Wireless Icon
 	eic_setup();
