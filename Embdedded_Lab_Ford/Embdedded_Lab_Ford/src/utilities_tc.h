@@ -6,11 +6,17 @@
  *  Author: Reese_Ford1
  */ 
 
+
+// TIMER_CLOCK2 PBA Clock / 2
+// TIMER_CLOCK3 PBA Clock / 8
+// TIMER_CLOCK4 PBA Clock / 32
+// TIMER_CLOCK5 PBA Clock / 128
+
 #ifndef UTILITIES_TC_H_
 #define UTILITIES_TC_H_
 static void configure_tc(void)
 {
-	// TODO: intialize ul_tcclks to a value that selects a valid timer counter
+	// TODO: initialize ul_tcclks to a value that selects a valid timer counter
 	clock
 	uint32_t ul_tcclks;
 	// get clock speed
