@@ -110,4 +110,12 @@ void SysTick_Handler(){
 	display_stopwatch_time(ticks);
 }
 
+// Delay
+static void mdelay(uint32_t delay_ms) {
+	uint32_t timestamp = ticks;
+	while (ticks < (timestamp+delay_ms)){
+		
+	}
+}
+
 #endif /* UTILITIES_H_ */

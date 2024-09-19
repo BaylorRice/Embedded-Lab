@@ -97,11 +97,18 @@ void display_clock_time(uint32_t ms_value) {
 int main (void)
 {
 	board_init();
+	sysclk_init();
+	SysTick_Config(sysclk_get_cpu_hz() / 1000); // One tick = 1ms
+	
+	// LED0 Delay
+	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
+	mdelay(3000);
+	ioport_set_pin_level(LED_0_PIN, LED_0_INACTIVE);
+	mdelay(3000);
+	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
 	
 	// Clock
-	sysclk_init();
 	c42412a_init();
-	SysTick_Config(sysclk_get_cpu_hz() / 1000);
 	
 	// Backlight Toggle
 	configure_lcd_backlight();
