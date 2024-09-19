@@ -48,7 +48,7 @@ void TC00_Handler(void)
 	if (timer_led == LED_STATE_OFF) {
 		timer_led = LED_STATE_ON;
 		ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-	} else if (timer_led == LED_STATE_OFF) {
+	} else if (timer_led == LED_STATE_ON) {
 		timer_led = LED_STATE_OFF;
 		ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
 	}
