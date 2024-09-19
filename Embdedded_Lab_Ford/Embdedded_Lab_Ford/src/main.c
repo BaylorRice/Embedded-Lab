@@ -99,4 +99,5 @@ int main (void)
 	board_init();
 	sysclk_init();
 	configure_tc();
+	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
 }

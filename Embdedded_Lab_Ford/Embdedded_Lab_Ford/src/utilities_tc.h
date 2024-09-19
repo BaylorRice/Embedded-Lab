@@ -38,14 +38,20 @@ static void configure_tc(void)
 	tc_start(TC0, 0);
 }
 // interrupt handler for the Timer Counter interrupt we configured
-volatile bool square = false;
+LED_STATE_TYPE timer_led = LED_STATE_OFF;
 void TC00_Handler(void)
 {
 	// tc_get_status must be called to acknowledge that the
 	// interrupt was handled
 	tc_get_status(TC0, 0);
 	// TODO: fill in the code to create the square wave
-	square = !square;
+	if (timer_led == LED_STATE_OFF) {
+		timer_led = LED_STATE_ON;
+		ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
+	} else if (timer_led == LED_STATE_OFF) {
+		timer_led = LED_STATE_OFF;
+		ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_OFF);
+	}
 	
 }
 #endif /* UTILITIES_TC_H_ */
