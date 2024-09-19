@@ -68,4 +68,7 @@
 #define TC_IRQn     TC2_IRQn
 //! [tc_define_irq_handler]
 
+// Define EIC Button Setting
+#define CONF_BOARD_EIC
+
 #endif /* CONF_BOARD_H_INCLUDED */
