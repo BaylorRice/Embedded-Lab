@@ -8,6 +8,7 @@
 #include "utilities_eic.h"
 #include "utilities_tc.h"
 #include "utilities_temperature_sensor.h"
+#include "conf_uart_serial.h"
 
 // create function prototypes based on the function definitions below
 GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);
@@ -119,4 +120,19 @@ static void mdelay(uint32_t delay_ms) {
 	}
 }
 
+
+// Configure Virtual COM Port
+static void configure_console(void)
+{
+	const usart_serial_options_t uart_serial_options =
+	{
+		.baudrate = CONF_UART_BAUDRATE,
+		.charlength = CONF_UART_CHAR_LENGTH,
+		.paritytype = CONF_UART_PARITY,
+		.stopbits = CONF_UART_STOP_BITS,
+	};
+	
+	// Configure console.
+	stdio_serial_init(CONF_UART, &uart_serial_options);
+}
 #endif /* UTILITIES_H_ */

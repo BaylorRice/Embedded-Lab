@@ -13,8 +13,8 @@ void initialize_temperature_sensor(void) {
 
 // Temperature Unit Enumeration
 typedef enum {
-	TEMPERATURE_UNIT_CELSIUS = 0;
-	TEMPERATURE_UNIT_FAHRENHEIT = 1;
+	TEMPERATURE_UNIT_CELSIUS = 0,
+	TEMPERATURE_UNIT_FAHRENHEIT = 1
 } TEMPERATURE_UNIT_TYPE;
 
 // Initialize Temperature Variables

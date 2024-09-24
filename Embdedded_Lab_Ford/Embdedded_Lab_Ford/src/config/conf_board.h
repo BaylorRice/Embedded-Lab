@@ -71,4 +71,7 @@
 // Define EIC Button Setting
 #define CONF_BOARD_EIC
 
+// Define Virtual COM Port Setting
+#define CONF_BOARD_COM_PORT
+
 #endif /* CONF_BOARD_H_INCLUDED */

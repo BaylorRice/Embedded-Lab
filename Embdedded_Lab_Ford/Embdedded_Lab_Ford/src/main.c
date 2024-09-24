@@ -40,7 +40,7 @@
 // Defining function prototypes so systick can use them
 void display_stopwatch_time(uint32_t);
 void display_clock_time(uint32_t);
-void display_temp(float, TEMPERATURE_UNIT_TYPE);
+//void display_temp(float, TEMPERATURE_UNIT_TYPE);
 
 #include "common.h"
 #include "utilities.h"
@@ -95,13 +95,15 @@ void display_clock_time(uint32_t ms_value) {
 	c42412a_show_icon(C42412A_ICON_COLON);
 }
 
-void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
-	// TODO: This Function
-}
+// void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
+// 	// TODO: This Function
+// }
 
 int main (void)
 {
 	board_init();
 	sysclk_init();
+	configure_console();
 	
+	printf("Initialization Complete\r\n");
 }
