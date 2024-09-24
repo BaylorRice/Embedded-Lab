@@ -48,4 +48,10 @@ typedef enum{
 // Light Sensor
 #define LIGHT_SENSOR_PIN EXT2_PIN_3
 
+// Temperature Unit Enumeration
+typedef enum {
+	TEMPERATURE_UNIT_CELSIUS = 0,
+	TEMPERATURE_UNIT_FAHRENHEIT = 1
+} TEMPERATURE_UNIT_TYPE;
+
 #endif /* COMMON_H_ */

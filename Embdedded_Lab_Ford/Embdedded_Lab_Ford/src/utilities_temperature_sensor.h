@@ -11,12 +11,6 @@ void initialize_temperature_sensor(void) {
 	// TODO: This function
 }
 
-// Temperature Unit Enumeration
-typedef enum {
-	TEMPERATURE_UNIT_CELSIUS = 0,
-	TEMPERATURE_UNIT_FAHRENHEIT = 1
-} TEMPERATURE_UNIT_TYPE;
-
 // Initialize Temperature Variables
 float temp_val = 0.0;
 TEMPERATURE_UNIT_TYPE temp_unit = TEMPERATURE_UNIT_CELSIUS;
