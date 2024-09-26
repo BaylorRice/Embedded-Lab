@@ -13,6 +13,7 @@
 
 // Transmit Buffers
 uint16_t set_config_data = 0x6001;
+uint8_t set_pointer_temp_reg = 0x00;
 
 // Initialize Temperature Sensor and any TWI functions
 status_code_t initialize_temperature_sensor(void) {
@@ -57,11 +58,40 @@ status_code_t initialize_temperature_sensor(void) {
 }
 
 // Initialize Temperature Variables
+uint16_t read_temp_data = 0x0000;
 float temp_val = 0.0;
 TEMPERATURE_UNIT_TYPE temp_unit = TEMPERATURE_UNIT_CELSIUS;
 
 // Read the Temp Sensor's Temperature
 // Convert the Data into a float temperature (XX.XXX) in the given unit
 float read_temp_sensor(TEMPERATURE_UNIT_TYPE tempUnits) {
-	// TODO: This function
+	// Set pointer register to read temperature
+	twi_package_t packet_tx;
+	packet_tx.chip				= TEMP_SENSOR_ADDRESS;
+	packet_tx.addr[0]			= 0;
+	packet_tx.addr[1]			= 0;
+	packet_tx.addr_length		= 0;
+	packet_tx.buffer			= (void *) &set_pointer_temp_reg;
+	packet_tx.length			= LENGTH_ONE_BYTE;
+	
+	packet_tx.addr[2]			= 0;
+	packet_tx.ten_bit			= 0;
+	packet_tx.high_speed		= 0;
+	packet_tx.high_speed_code	= 0;
+	twi_master_write(TWIM3, &packet_tx);
+	
+	// Read Temperature Data
+	twi_package_t packet_rx;
+	packet_rx.chip				= TEMP_SENSOR_ADDRESS;
+	packet_rx.addr[0]			= 0;
+	packet_rx.addr[1]			= 0;
+	packet_rx.addr_length		= 0;
+	packet_rx.buffer			= (void *) &read_temp_data;
+	packet_rx.length			= LENGTH_TWO_BYTES;
+	
+	packet_rx.addr[2]			= 0;
+	packet_rx.ten_bit			= 0;
+	packet_rx.high_speed		= 0;
+	packet_rx.high_speed_code	= 0;
+	twi_master_read(TWIM3, &packet_rx);
 }
