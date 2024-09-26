@@ -97,4 +97,12 @@ float read_temp_sensor(TEMPERATURE_UNIT_TYPE tempUnits) {
 	packet_rx.high_speed		= 0;
 	packet_rx.high_speed_code	= 0;
 	twi_master_read(TWIM3, &packet_rx);
+	
+	// Calculate 
+	uint16_t temp_data = (read_temp_data[0] * 0x100) + read_temp_data[1];
+	temp_data = temp_data >> 4;
+	temp_val = temp_data * 0.0625;
+	if (tempUnits == TEMPERATURE_UNIT_FAHRENHEIT) {
+		temp_val = (temp_val * 9.0/5.0) + 32;
+	}
 }
