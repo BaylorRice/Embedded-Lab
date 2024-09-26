@@ -106,4 +106,6 @@ int main (void)
 	configure_console();
 	
 	printf("Initialization Complete\r\n");
+	status_code_t initialize_status = OPERATION_IN_PROGRESS;
+	initialize_status = initialize_temperature_sensor();
 }

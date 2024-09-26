@@ -74,4 +74,7 @@
 // Define Virtual COM Port Setting
 #define CONF_BOARD_COM_PORT
 
+// Define TWIM Setting for Temp Sensor
+#define CONF_BOARD_TWIMS3
+
 #endif /* CONF_BOARD_H_INCLUDED */
