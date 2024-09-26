@@ -12,12 +12,15 @@
 #define LENGTH_ONE_BYTE 1
 
 // Transmit Buffers
-uint16_t set_config_data = 0x6001;
+uint8_t set_config_data[2] = {0};
 uint8_t set_pointer_temp_reg = 0x00;
 
 // Initialize Temperature Sensor and any TWI functions
 status_code_t initialize_temperature_sensor(void) {
 	status_code_t write_status = OPERATION_IN_PROGRESS;
+	set_config_data[0] = 0x01;
+	set_config_data[1] = 0x60;
+	
 	// Set TWIM Configuration
 	struct twim_config twim_conf;
 	twim_conf.twim_clk						= sysclk_get_cpu_hz();
@@ -45,7 +48,7 @@ status_code_t initialize_temperature_sensor(void) {
 	packet_tx.addr[0]			= 0;
 	packet_tx.addr[1]			= 0;
 	packet_tx.addr_length		= 0;
-	packet_tx.buffer			= (void *) &set_config_data;
+	packet_tx.buffer			= (void *) set_config_data;
 	packet_tx.length			= LENGTH_TWO_BYTES;
 	
 	packet_tx.addr[2]			= 0;
@@ -58,7 +61,7 @@ status_code_t initialize_temperature_sensor(void) {
 }
 
 // Initialize Temperature Variables
-uint16_t read_temp_data = 0x0000;
+uint8_t read_temp_data[2] = {0};
 float temp_val = 0.0;
 TEMPERATURE_UNIT_TYPE temp_unit = TEMPERATURE_UNIT_CELSIUS;
 
