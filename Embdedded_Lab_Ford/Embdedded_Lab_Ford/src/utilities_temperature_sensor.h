@@ -103,5 +103,9 @@ float read_temp_sensor(TEMPERATURE_UNIT_TYPE tempUnits) {
 	temp_val = temp_data * 0.0625;
 	if (tempUnits == TEMPERATURE_UNIT_FAHRENHEIT) {
 		temp_val = (temp_val * 9.0/5.0) + 32;
+		printf("%2.4f F\r\n", temp_val);
+	} else{
+		printf("%2.4f C\r\n", temp_val);
 	}
+	
 }

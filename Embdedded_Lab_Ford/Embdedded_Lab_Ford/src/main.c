@@ -96,7 +96,15 @@ void display_clock_time(uint32_t ms_value) {
 }
 
 void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
-	// TODO: This Function
+	c42412a_show_numeric_dec(temp_val*1000);
+	c42412a_show_icon(C42412A_ICON_DOT_3);
+	if (unit == TEMPERATURE_UNIT_FAHRENHEIT) {
+		c42412a_clear_icon(C42412A_ICON_DEGREE_C);
+		c42412a_show_icon(C42412A_ICON_DEGREE_F);
+	} else if (unit == TEMPERATURE_UNIT_CELSIUS) {
+		c42412a_clear_icon(C42412A_ICON_DEGREE_F);
+		c42412a_show_icon(C42412A_ICON_DEGREE_C);
+	}
 }
 
 int main (void)
@@ -111,12 +119,14 @@ int main (void)
 	
 	// Initialize Temp Sensor
 	initialize_temperature_sensor();
-	read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
 	
-	while ()
-	{
-		
-		
+	uint32_t timestamp = 0;
+	while (1) {
+		if ((ticks - timestamp) == 200){
+			timestamp = ticks;
+			read_temp_sensor(temp_unit);
+			display_temp(temp_val, temp_unit);
+		}
 	}
 	
 }

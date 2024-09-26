@@ -5,9 +5,9 @@
 
 #include "utilities_lcd.h"
 #include "utilities_light_sensor.h"
+#include "utilities_temperature_sensor.h"
 #include "utilities_eic.h"
 #include "utilities_tc.h"
-#include "utilities_temperature_sensor.h"
 #include "conf_uart_serial.h"
 
 // create function prototypes based on the function definitions below

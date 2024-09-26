@@ -42,5 +42,4 @@ void eic_setup() {
 	
 	eic_line_enable(EIC, GPIO_PUSH_BUTTON_EIC_LINE);
 	
-	c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
 }
