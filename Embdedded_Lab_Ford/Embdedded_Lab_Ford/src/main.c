@@ -109,4 +109,5 @@ int main (void)
 	status_code_t initialize_status = OPERATION_IN_PROGRESS;
 	initialize_status = initialize_temperature_sensor();
 	read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
+	
 }

@@ -16,8 +16,7 @@ uint8_t set_config_data[2] = {0};
 uint8_t set_pointer_temp_reg = 0x00;
 
 // Initialize Temperature Sensor and any TWI functions
-status_code_t initialize_temperature_sensor(void) {
-	status_code_t write_status = OPERATION_IN_PROGRESS;
+void initialize_temperature_sensor(void) {
 	set_config_data[0] = 0x01;
 	set_config_data[1] = 0x60;
 	
@@ -55,7 +54,7 @@ status_code_t initialize_temperature_sensor(void) {
 	packet_tx.ten_bit			= 0;
 	packet_tx.high_speed		= 0;
 	packet_tx.high_speed_code	= 0;
-	write_status = twi_master_write(TWIM3, &packet_tx);
+	twi_master_write(TWIM3, &packet_tx);
 	
 	printf("Temp Sensor Initialized\r\n");
 }
