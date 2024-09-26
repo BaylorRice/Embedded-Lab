@@ -103,11 +103,20 @@ int main (void)
 {
 	board_init();
 	sysclk_init();
+	SysTick_Config(sysclk_get_cpu_hz()/1000);
 	configure_console();
-	
+	c42412a_init();
+	eic_setup();
 	printf("Initialization Complete\r\n");
-	status_code_t initialize_status = OPERATION_IN_PROGRESS;
-	initialize_status = initialize_temperature_sensor();
+	
+	// Initialize Temp Sensor
+	initialize_temperature_sensor();
 	read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
+	
+	while ()
+	{
+		
+		
+	}
 	
 }
