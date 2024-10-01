@@ -3,8 +3,8 @@
  * Lab A4 - Digital Thermometer
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Sept 24, 2024
- * Last Commit: 7a7084dd56c0c134dc4a0c224410fa861fcd64a4
+ * Modified: Oct 01, 2024
+ * Last Commit: d87ac312b6e7622e6e6e42bd1c61e9e972f5f1c8
  */
 
 /**
