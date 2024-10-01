@@ -1,15 +1,18 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-// breadboard LED macros
-#define BREADBOARD_LED_PIN EXT1_PIN_6
-#define BREADBOARD_LED_OFF 0
-#define BREADBOARD_LED_ON  1
 #define NUM_MICROCONTROLLER_PINS 100
 
+// breadboard LED macros
+#define BREADBOARD_LED_PIN EXT1_PIN_6 // Green Wire
+#define BREADBOARD_LED_OFF 0
+#define BREADBOARD_LED_ON  1
+
 // breadboard button macros
-#define BREADBOARD_BUTTON_PIN EXT1_PIN_7
-#define BREADBOARD_BUTTON_ACIVE true
+#define BREADBOARD_BUTTON1_PIN EXT1_PIN_7 // Yellow Wire
+#define BREADBOARD_BUTTON1_ACIVE true
+#define BREADBOARD_BUTTON2_PIN EXT1_PIN_8 // Blue Wire
+#define BREADBOARD_BUTTON2_ACIVE true
 
 // pin level enumeration
 // "level" indicates the voltage level of
