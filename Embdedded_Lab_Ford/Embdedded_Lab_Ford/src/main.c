@@ -1,10 +1,10 @@
 /**
  * Embedded Lab - Atmel
- * Lab A3 - Event Driven System
+ * Lab A4 - Digital Thermometer
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Sept 19, 2024
- * Last Commit: 5629f21a641f74a1b46c2d2eba85667cbba007c9
+ * Modified: Oct 01, 2024
+ * Last Commit: d87ac312b6e7622e6e6e42bd1c61e9e972f5f1c8
  */
 
 /**
@@ -36,12 +36,13 @@
 
 #include <asf.h>
 #include <stdio.h>
+#include "common.h"
 
 // Defining function prototypes so systick can use them
 void display_stopwatch_time(uint32_t);
 void display_clock_time(uint32_t);
+void display_temp(float, TEMPERATURE_UNIT_TYPE);
 
-#include "common.h"
 #include "utilities.h"
 
 // Display the ms time as ss.ms on the LCD
@@ -94,51 +95,38 @@ void display_clock_time(uint32_t ms_value) {
 	c42412a_show_icon(C42412A_ICON_COLON);
 }
 
+void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
+	c42412a_show_numeric_dec(temp_val*1000);
+	c42412a_show_icon(C42412A_ICON_DOT_3);
+	if (unit == TEMPERATURE_UNIT_FAHRENHEIT) {
+		c42412a_clear_icon(C42412A_ICON_DEGREE_C);
+		c42412a_show_icon(C42412A_ICON_DEGREE_F);
+	} else if (unit == TEMPERATURE_UNIT_CELSIUS) {
+		c42412a_clear_icon(C42412A_ICON_DEGREE_F);
+		c42412a_show_icon(C42412A_ICON_DEGREE_C);
+	}
+}
+
 int main (void)
 {
 	board_init();
 	sysclk_init();
-	SysTick_Config(sysclk_get_cpu_hz() / 1000); // One tick = 1ms
-	
-	// LED0 Delay
-	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-	mdelay(3000);
-	ioport_set_pin_level(LED_0_PIN, LED_0_INACTIVE);
-	mdelay(3000);
-	ioport_set_pin_level(LED_0_PIN, LED_0_ACTIVE);
-	
-	// Clock
+	SysTick_Config(sysclk_get_cpu_hz()/1000);
+	configure_console();
 	c42412a_init();
-	
-	// Backlight Toggle
-	configure_lcd_backlight();
-	configure_light_sensor();
-	if (ioport_get_pin_level(LIGHT_SENSOR_PIN) == 1) {
-		backlight_level = LCD_BACKLIGHT_ON;
-		set_lcd_backlight(LCD_BACKLIGHT_ON);
-	} else {
-		backlight_level = LCD_BACKLIGHT_OFF;
-		set_lcd_backlight(LCD_BACKLIGHT_OFF);
-	}
-	
-	// Wireless Icon
 	eic_setup();
+	printf("Initialization Complete\r\n");
 	
-	// Breadboard LED Dim
-	ioport_set_pin_dir(BREADBOARD_LED_PIN, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(BREADBOARD_LED_PIN, BREADBOARD_LED_ON);
-	configure_tc();
+	// Initialize Temp Sensor
+	initialize_temperature_sensor();
 	
-	// Configure Priorities
-	NVIC_SetPriority(EIC_1_IRQn, 4);
-	NVIC_SetPriority(SysTick_IRQn, 1);
-	NVIC_SetPriority(GPIO_0_IRQn, 2);
-	NVIC_SetPriority(TC00_IRQn, 3);
-	
-	uint32_t eic_prio = NVIC_GetPriority(EIC_1_IRQn);
-	uint32_t systick_prio = NVIC_GetPriority(SysTick_IRQn);
-	uint32_t gpio_prio = NVIC_GetPriority(GPIO_0_IRQn);
-	uint32_t tc_prio = NVIC_GetPriority(TC00_IRQn);
-	
+	uint32_t timestamp = 0;
+	while (1) {
+		if ((ticks - timestamp) == 200){
+			timestamp = ticks;
+			read_temp_sensor(temp_unit);
+			display_temp(temp_val, temp_unit);
+		}
+	}
 	
 }
