@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+// create function prototypes based on the function definitions below
+GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);
+
+#include "utilities_breadboard.h"
 #include "utilities_lcd.h"
 #include "utilities_light_sensor.h"
 #include "utilities_temperature_sensor.h"
@@ -10,8 +14,6 @@
 #include "utilities_tc.h"
 #include "conf_uart_serial.h"
 
-// create function prototypes based on the function definitions below
-GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);
 
 /////////////////////////////////////////////////////////////////////////////
 // Name: check_gpio_input_state
