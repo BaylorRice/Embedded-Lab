@@ -1,6 +1,6 @@
 /**
  * Embedded Lab - Atmel
- * Lab A4 - Digital Thermometer
+ * Two Button Test
  * Reese Ford
  * Created: Aug 29, 2024
  * Modified: Oct 01, 2024
@@ -110,23 +110,57 @@ void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
 int main (void)
 {
 	board_init();
-	sysclk_init();
-	SysTick_Config(sysclk_get_cpu_hz()/1000);
-	configure_console();
-	c42412a_init();
-	eic_setup();
-	printf("Initialization Complete\r\n");
+
+	// Configure Breadboard LED
+	configure_bread_led(BREADBOARD_LED_PIN);
+
+	// configure button 1
+	configure_bread_button(BREADBOARD_BUTTON1_PIN);
+	configure_bread_button(BREADBOARD_BUTTON2_PIN);
 	
-	// Initialize Temp Sensor
-	initialize_temperature_sensor();
+	// Define State Machine
+	typedef enum {
+		STATE_LED_OFF = 0,
+		STATE_LED_ON = 1
+	}RSNOR_STATE_TYPE;
+	RSNOR_STATE_TYPE program_state = STATE_LED_OFF;
 	
-	uint32_t timestamp = 0;
-	while (1) {
-		if ((ticks - timestamp) == 200){
-			timestamp = ticks;
-			read_temp_sensor(temp_unit);
-			display_temp(temp_val, temp_unit);
+	// Define button level variables
+	GPIO_INPUT_STATE_TYPE button1_level = GPIO_INPUT_STATE_LOW;
+	GPIO_INPUT_STATE_TYPE button2_level = GPIO_INPUT_STATE_LOW;
+	GPIO_INPUT_STATE_TYPE button0_level = GPIO_INPUT_STATE_LOW;
+
+
+	while (1)
+	{
+		// Read buttons
+		button1_level = read_bread_button(BREADBOARD_BUTTON1_PIN);
+		button2_level = read_bread_button(BREADBOARD_BUTTON2_PIN);
+		button0_level = read_bread_button(BUTTON_0_PIN);
+		
+		switch(program_state) {
+			case STATE_LED_OFF:
+				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
+				if (button1_level == GPIO_INPUT_STATE_RISING_EDGE) {
+					program_state = STATE_LED_ON;
+				}
+				if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+					program_state = STATE_LED_ON;
+				}
+				break;
+			case STATE_LED_ON:
+				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_ON);
+				if (button2_level == GPIO_INPUT_STATE_RISING_EDGE) {
+					program_state = STATE_LED_OFF;
+				}
+				if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+					program_state = STATE_LED_OFF;
+				}
+				break;
+			default:
+				program_state = STATE_LED_OFF;
 		}
+
 	}
 	
 }
