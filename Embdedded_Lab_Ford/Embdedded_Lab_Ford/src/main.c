@@ -8,7 +8,7 @@
  */
 
 // What I couldn't get functional
-//	Temperature reading
+//	Temperature reading (TWIM needs to be a higher priority than TC)
 
 // Everything else should be working
 
