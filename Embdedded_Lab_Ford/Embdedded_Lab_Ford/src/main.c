@@ -36,6 +36,7 @@
 
 #include <asf.h>
 #include <stdio.h>
+#include <string.h>
 #include "common.h"
 
 // Defining function prototypes so systick can use them
@@ -142,9 +143,13 @@ int main (void)
 	GPIO_INPUT_STATE_TYPE button2_level = GPIO_INPUT_STATE_LOW;
 
 	// Program Variables
-	uint32_t code[4] = {0};
+	uint32_t code[4];
+	for (int i = 0; i < 4; i++) {
+		code[i] = 0;
+	}
 	char code_string[4] = "";
 	uint32_t tries = 0;
+	uint32_t index = 0;
 
 	while (1)
 	{
@@ -155,13 +160,38 @@ int main (void)
 		switch(state) {
 			case IDLE:
 			// IDLE Action
+			for (int i = 0; i < 4; i++) {
+				code[i] = i+10;
+			}
+			tries = 0;
+			
 			display_clock_time(ticks);
 			
 			// IDLE State Change
+			if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+				c42412a_clear_all();
+				index = 0;
+				state = CREATE_CODE;
+			}
 			break;
 			
 			case CREATE_CODE:
 			// CREATE_CODE Action
+			for (int i = 0; i < 4; i++) {
+				if (code[i] < 10) {
+					code_string[i] = code[i] + 48;
+				} else {
+					code_string[i] = code[i] + 55;
+				}
+			}
+			
+			c42412a_show_text(code_string);
+			
+// 			switch(index) {
+// 				case 0:
+// 				
+// 				
+// 			}
 			
 			// CREATE_CODE State Change
 			break;
