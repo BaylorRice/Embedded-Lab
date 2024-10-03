@@ -7,7 +7,10 @@
  * Last Commit: 6d13b4c454df58c02b571a31d0fe71daade66460
  */
 
+// What I couldn't get functional
+//	Temperature reading
 
+// Everything else should be working
 
 #include <asf.h>
 #include <stdio.h>
