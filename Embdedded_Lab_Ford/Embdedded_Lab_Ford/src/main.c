@@ -126,14 +126,13 @@ int main (void)
 	typedef enum {
 		IDLE = 0,
 		CREATE_CODE = 1,
-		SHOW_WORD_COMBO = 2,
-		SHOW_COMBO = 3,
-		LOCKED = 4,
-		ENTER_CODE = 5,
-		SHOW_DENY = 6,
-		SELF_DESTRUCT = 7,
-		DEAD = 8,
-		OPEN = 9
+		SHOW_COMBO = 2,
+		LOCKED = 3,
+		ENTER_CODE = 4,
+		SHOW_DENY = 5,
+		SELF_DESTRUCT = 6,
+		DEAD = 7,
+		OPEN = 8
 	}FOOTBALL_STATE_TYPE;
 	FOOTBALL_STATE_TYPE state = IDLE;
 	
@@ -217,25 +216,28 @@ int main (void)
 			
 			// CREATE_CODE State Change
 			if (index == 4) {
-				state = SHOW_WORD_COMBO;
+				state = SHOW_COMBO;
 			}
 			
 			break;
 			
-			case SHOW_WORD_COMBO:
-			// SHOW_WORD_COMBO Action
-			
-			// SHOW_WORD_COMBO State Change
-			break;
-			
 			case SHOW_COMBO:
-			// SHOW_COMBO Action
+			// Show Word Combo
+			set_bread_led(BREADBOARD_LED_PIN, LED_STATE_ON);
+			c42412a_clear_all();
+			c42412a_show_text("COMBO");
+			mdelay(1000);
 			
-			// SHOW_COMBO State Change
+			// Show Actual Combo
+			c42412a_show_text(code_string);
+			mdelay(5000);
+			c42412a_clear_all();
+			state = LOCKED;
 			break;
 			
 			case LOCKED:
 			// LOCKED Action
+			display_clock_time(ticks);
 			
 			// LOCKED State Change
 			break;
