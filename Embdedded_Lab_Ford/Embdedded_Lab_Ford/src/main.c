@@ -142,10 +142,14 @@ int main (void)
 
 	// Program Variables
 	uint32_t code[4];
+	uint32_t input_code[4];
 	for (int i = 0; i < 4; i++) {
 		code[i] = 0;
+		input_code[i] = 0;
 	}
-	char code_string[4] = "";
+	bool code_correct = false;
+	uint32_t num_incorrect = 0;
+	char code_string[5] = "";
 	uint32_t tries = 0;
 	uint32_t index = 0;
 
@@ -160,6 +164,7 @@ int main (void)
 			// Reset all variables
 			for (int i = 0; i < 4; i++) {
 				code[i] = 0;
+				input_code[i] = 0;
 			}
 			tries = 0;
 			
@@ -229,29 +234,117 @@ int main (void)
 			mdelay(1000);
 			
 			// Show Actual Combo
+			c42412a_clear_all();
 			c42412a_show_text(code_string);
 			mdelay(5000);
 			c42412a_clear_all();
+			for (int i = 0; i<4; i++) {
+				code_string[i] = 0;
+			}
 			state = LOCKED;
 			break;
 			
 			case LOCKED:
-			// LOCKED Action
+			// Show time, reset index
 			display_clock_time(ticks);
+			index = 0;
 			
-			// LOCKED State Change
+			// Input Code
+			if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+				c42412a_clear_all();
+				state = ENTER_CODE;
+			}
 			break;
 			
 			case ENTER_CODE:
-			// ENTER_CODE Action
+			if (index < 4) {
+				// Set code_string to show input_code
+				for (int i = 0; i < 4; i++) {
+					if (input_code[i] < 10) {
+						code_string[i] = input_code[i] + 48;
+						} else {
+						code_string[i] = input_code[i] + 55;
+					}
+				}
+				
+				// Show code string
+				c42412a_show_text(code_string);
+				
+				switch(index) {
+					case 0: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+					break;
+					case 1: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_1);
+					break;
+					case 2: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_2);
+					break;
+					case 3: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_3);
+					break;
+					default: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+					break;
+				}
+				c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+				if (button1_level == GPIO_INPUT_STATE_RISING_EDGE) {
+					if (input_code[index] < 15) {
+						input_code[index] = input_code[index] + 1;
+						} else {
+						input_code[index] = 0;
+					}
+				}
+				
+				if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+					index++;
+				}
+			}
 			
-			// ENTER_CODE State Change
+			// Check Code
+			if (index == 4) {
+				code_correct = true;
+				for (int i = 0; i<4; i++) {
+					if (code_correct) {
+						if (code[i] != input_code[i]) {
+							code_correct = false;
+						}
+					}
+				}
+				if (code_correct) {
+					state = OPEN;
+					} else if (!code_correct) {
+					if (num_incorrect == 0) {
+						num_incorrect = 1;
+						uint32_t timestamp = ticks;
+						state = SHOW_DENY;
+						} else if (num_incorrect == 1) {
+						num_incorrect = 2;
+						state = SELF_DESTRUCT;
+					}
+				}
+			}
 			break;
 			
 			case SHOW_DENY:
 			// SHOW_DENY Action
+			c42412a_clear_all();
+			c42412a_show_text("DENY");
+			
+			// Toggle LED
+			set_bread_led(LED_0_PIN, LED_0_ACTIVE);
+			mdelay(1000);
+			set_bread_led(LED_0_PIN, LED_0_INACTIVE);
+			mdelay(1000);
+			set_bread_led(LED_0_PIN, LED_0_ACTIVE);
+			mdelay(1000);
+			set_bread_led(LED_0_PIN, LED_0_INACTIVE);
+			mdelay(1000);
+			set_bread_led(LED_0_PIN, LED_0_ACTIVE);
+			mdelay(1000);
 			
 			// SHOW_DENY State Change
+			c42412a_clear_all();
+			index = 0;
+			for (int i = 0; i<4; i++) {
+				input_code[i] = 0;
+			}
+			state = LOCKED;
 			break;
 			
 			case SELF_DESTRUCT:
