@@ -132,17 +132,86 @@ int main (void)
 		DEAD = 8,
 		OPEN = 9
 	}FOOTBALL_STATE_TYPE;
-	FOOTBALL_STATE_TYPE state = STATE_LED_OFF;
+	FOOTBALL_STATE_TYPE state = IDLE;
 	
 	// Define button level variables
 	GPIO_INPUT_STATE_TYPE button0_level = GPIO_INPUT_STATE_LOW;
 	GPIO_INPUT_STATE_TYPE button1_level = GPIO_INPUT_STATE_LOW;
 	GPIO_INPUT_STATE_TYPE button2_level = GPIO_INPUT_STATE_LOW;
 
+	
+
 
 	while (1)
 	{
-
+		button0_level = read_bread_button(BUTTON_0_PIN);
+		button1_level = read_bread_button(BREADBOARD_BUTTON1_PIN);
+		button2_level = read_bread_button(BREADBOARD_BUTTON2_PIN);
+		
+		switch(state) {
+			case IDLE:
+			// IDLE Action
+			
+			// IDLE State Change
+			break;
+			
+			case CREATE_CODE:
+			// CREATE_CODE Action
+			
+			// CREATE_CODE State Change
+			break;
+			
+			case SHOW_WORD_COMBO:
+			// SHOW_WORD_COMBO Action
+			
+			// SHOW_WORD_COMBO State Change
+			break;
+			
+			case SHOW_COMBO:
+			// SHOW_COMBO Action
+			
+			// SHOW_COMBO State Change
+			break;
+			
+			case LOCKED:
+			// LOCKED Action
+			
+			// LOCKED State Change
+			break;
+			
+			case ENTER_CODE:
+			// ENTER_CODE Action
+			
+			// ENTER_CODE State Change
+			break;
+			
+			case SHOW_DENY:
+			// SHOW_DENY Action
+			
+			// SHOW_DENY State Change
+			break;
+			
+			case SELF_DESTRUCT:
+			// SELF_DESTRUCT Action
+			
+			// SELF_DESTRUCT State Change
+			break;
+			
+			case DEAD:
+			// DEAD
+			exit(0);
+			break;
+			
+			case OPEN:
+			// OPEN Action
+			
+			// OPEN State Change
+			break;
+			
+			default:
+			state = IDLE;
+			
+		}
 	}
 	
 }
