@@ -151,7 +151,6 @@ int main (void)
 	bool code_correct = false;
 	uint32_t num_incorrect = 0;
 	char code_string[5] = "";
-	uint32_t tries = 0;
 	uint32_t index = 0;
 
 	while (1)
@@ -167,7 +166,10 @@ int main (void)
 				code[i] = 0;
 				input_code[i] = 0;
 			}
-			tries = 0;
+			num_incorrect = 0;
+			set_lcd_backlight(LCD_BACKLIGHT_OFF);
+			set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
+			set_bread_led(LED_0_PIN, LED_0_INACTIVE);
 			
 			// Show time
 			display_clock_time(ticks);
@@ -371,8 +373,14 @@ int main (void)
 			
 			case OPEN:
 			// OPEN Action
+			c42412a_clear_all();
+			set_lcd_backlight(LCD_BACKLIGHT_OFF);
+			set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
+			set_bread_led(LED_0_PIN, LED_0_INACTIVE);
 			
-			// OPEN State Change
+			c42412a_show_text("OPEN");
+			mdelay(5000);
+			state = IDLE;
 			break;
 			
 			default:
