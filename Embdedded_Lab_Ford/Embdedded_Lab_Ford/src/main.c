@@ -110,7 +110,9 @@ void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
 int main (void)
 {
 	board_init();
-	
+	c42412a_init();
+	sysclk_init();
+	SysTick_Config(sysclk_get_cpu_hz()/1000);
 
 	// Configure Breadboard LED
 	configure_bread_led(BREADBOARD_LED_PIN);
@@ -139,8 +141,10 @@ int main (void)
 	GPIO_INPUT_STATE_TYPE button1_level = GPIO_INPUT_STATE_LOW;
 	GPIO_INPUT_STATE_TYPE button2_level = GPIO_INPUT_STATE_LOW;
 
-	
-
+	// Program Variables
+	uint32_t code[4] = {0};
+	char code_string[4] = "";
+	uint32_t tries = 0;
 
 	while (1)
 	{
@@ -151,6 +155,7 @@ int main (void)
 		switch(state) {
 			case IDLE:
 			// IDLE Action
+			display_clock_time(ticks);
 			
 			// IDLE State Change
 			break;
