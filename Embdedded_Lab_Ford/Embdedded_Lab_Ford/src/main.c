@@ -114,6 +114,8 @@ int main (void)
 	c42412a_init();
 	sysclk_init();
 	SysTick_Config(sysclk_get_cpu_hz()/1000);
+	configure_lcd_backlight();
+	set_lcd_backlight(LCD_BACKLIGHT_OFF);
 
 	// Configure Breadboard LED
 	configure_bread_led(BREADBOARD_LED_PIN);
@@ -349,7 +351,21 @@ int main (void)
 			case SELF_DESTRUCT:
 			// SELF_DESTRUCT Action
 			c42412a_clear_all();
+			c42412a_show_text("BYE");
 			
+			for (int i = 0; i < 10; i++) {
+				set_bread_led(LED_0_PIN, LED_0_ACTIVE);
+				set_lcd_backlight(LCD_BACKLIGHT_ON);
+				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_ON);
+				mdelay(100);
+			
+				set_bread_led(LED_0_PIN, LED_0_INACTIVE);
+				set_lcd_backlight(LCD_BACKLIGHT_OFF);
+				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
+				mdelay(100);
+			}
+			
+			c42412a_clear_all();
 			exit(0);
 			break;
 			
