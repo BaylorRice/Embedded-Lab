@@ -32,7 +32,7 @@ GPIO_INPUT_STATE_TYPE read_bread_button(int pin_num) {
 	return check_gpio_input_state(pin_num);
 }
 
-volatile uint32_t timestamp = 0;
+volatile uint32_t gpio_timestamp = 0;
 volatile bool button_held = false;
 volatile bool trigger = false;
 
