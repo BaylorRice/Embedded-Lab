@@ -1,38 +1,13 @@
 /**
  * Embedded Lab - Atmel
- * Two Button Test
+ * Application Exam
  * Reese Ford
  * Created: Aug 29, 2024
- * Modified: Oct 01, 2024
+ * Modified: Oct 03, 2024
  * Last Commit: 6d13b4c454df58c02b571a31d0fe71daade66460
  */
 
-/**
- * \mainpage User Application template doxygen documentation
- *
- * \par Empty user application template
- *
- * This is a bare minimum user application template.
- *
- * For documentation of the board, go \ref group_common_boards "here" for a link
- * to the board-specific documentation.
- *
- * \par Content
- *
- * -# Include the ASF header files (through asf.h)
- * -# Minimal main function that starts with a call to board_init()
- * -# Basic usage of on-board LED and button
- * -# "Insert application code here" comment
- *
- */
 
-/*
- * Include header files for all drivers that have been imported from
- * Atmel Software Framework (ASF).
- */
-/*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
- */
 
 #include <asf.h>
 #include <stdio.h>
