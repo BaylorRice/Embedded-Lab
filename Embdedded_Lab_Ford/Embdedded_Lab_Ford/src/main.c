@@ -131,8 +131,7 @@ int main (void)
 		ENTER_CODE = 4,
 		SHOW_DENY = 5,
 		SELF_DESTRUCT = 6,
-		DEAD = 7,
-		OPEN = 8
+		OPEN = 7
 	}FOOTBALL_STATE_TYPE;
 	FOOTBALL_STATE_TYPE state = IDLE;
 	
@@ -349,12 +348,8 @@ int main (void)
 			
 			case SELF_DESTRUCT:
 			// SELF_DESTRUCT Action
+			c42412a_clear_all();
 			
-			// SELF_DESTRUCT State Change
-			break;
-			
-			case DEAD:
-			// DEAD
 			exit(0);
 			break;
 			
