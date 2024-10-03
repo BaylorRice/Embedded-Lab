@@ -140,7 +140,6 @@ int main (void)
 	// Define button level variables
 	GPIO_INPUT_STATE_TYPE button0_level = GPIO_INPUT_STATE_LOW;
 	GPIO_INPUT_STATE_TYPE button1_level = GPIO_INPUT_STATE_LOW;
-	GPIO_INPUT_STATE_TYPE button2_level = GPIO_INPUT_STATE_LOW;
 
 	// Program Variables
 	uint32_t code[4];
@@ -155,16 +154,17 @@ int main (void)
 	{
 		button0_level = read_bread_button(BUTTON_0_PIN);
 		button1_level = read_bread_button(BREADBOARD_BUTTON1_PIN);
-		button2_level = read_bread_button(BREADBOARD_BUTTON2_PIN);
+		mdelay(10);
 		
 		switch(state) {
 			case IDLE:
-			// IDLE Action
+			// Reset all variables
 			for (int i = 0; i < 4; i++) {
-				code[i] = i+10;
+				code[i] = 0;
 			}
 			tries = 0;
 			
+			// Show time
 			display_clock_time(ticks);
 			
 			// IDLE State Change
@@ -176,24 +176,50 @@ int main (void)
 			break;
 			
 			case CREATE_CODE:
-			// CREATE_CODE Action
-			for (int i = 0; i < 4; i++) {
-				if (code[i] < 10) {
-					code_string[i] = code[i] + 48;
-				} else {
-					code_string[i] = code[i] + 55;
+			if (index < 4) {
+				// Set code_string to show code
+				for (int i = 0; i < 4; i++) {
+					if (code[i] < 10) {
+						code_string[i] = code[i] + 48;
+					} else {
+						code_string[i] = code[i] + 55;
+					}
+				}
+			
+				// Show code string
+				c42412a_show_text(code_string);
+			
+				switch(index) {
+					case 0: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+					break;
+					case 1: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_1);
+					break;
+					case 2: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_2);
+					break;
+					case 3: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_3);
+					break;
+					default: c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+					break;
+				}
+				c42412a_show_icon(C42412A_ICON_WLESS_LEVEL_0);
+				if (button1_level == GPIO_INPUT_STATE_RISING_EDGE) {
+					if (code[index] < 15) {
+						code[index] = code[index] + 1;
+					} else {
+						code[index] = 0;
+					}
+				}
+			
+				if (button0_level == GPIO_INPUT_STATE_FALLING_EDGE) {
+					index++;
 				}
 			}
 			
-			c42412a_show_text(code_string);
-			
-// 			switch(index) {
-// 				case 0:
-// 				
-// 				
-// 			}
-			
 			// CREATE_CODE State Change
+			if (index == 4) {
+				state = SHOW_WORD_COMBO;
+			}
+			
 			break;
 			
 			case SHOW_WORD_COMBO:
