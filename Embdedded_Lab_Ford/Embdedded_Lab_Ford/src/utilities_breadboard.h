@@ -31,3 +31,16 @@ void configure_bread_button(int pin_num) {
 GPIO_INPUT_STATE_TYPE read_bread_button(int pin_num) {
 	return check_gpio_input_state(pin_num);
 }
+
+volatile uint32_t timestamp = 0;
+volatile bool button_held = false;
+volatile bool trigger = false;
+
+void button_gpio_handler();
+
+void configure_button_interrupt(int pin_number) {
+	ioport_set_pin_dir(pin_number, IOPORT_DIR_INPUT);
+	gpio_set_pin_callback(pin_number, button_gpio_handler, 1);
+	gpio_enable_pin_interrupt(pin_number);
+}
+

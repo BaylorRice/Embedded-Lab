@@ -5,6 +5,7 @@
 
 // create function prototypes based on the function definitions below
 GPIO_INPUT_STATE_TYPE check_gpio_input_state(int);
+volatile uint32_t ticks = 0;
 
 #include "utilities_breadboard.h"
 #include "utilities_lcd.h"
@@ -108,7 +109,7 @@ GPIO_INPUT_STATE_TYPE check_gpio_input_state(int pin_number)
 }
 
 // Stopwatch
-volatile uint32_t ticks = 0;
+
 void SysTick_Handler(){
 	ticks++;
 }

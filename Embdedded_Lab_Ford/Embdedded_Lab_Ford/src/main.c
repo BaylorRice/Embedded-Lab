@@ -43,6 +43,20 @@
 void display_stopwatch_time(uint32_t);
 void display_clock_time(uint32_t);
 void display_temp(float, TEMPERATURE_UNIT_TYPE);
+void self_destruct();
+
+// Define State Machine
+typedef enum {
+	IDLE = 0,
+	CREATE_CODE = 1,
+	SHOW_COMBO = 2,
+	LOCKED = 3,
+	ENTER_CODE = 4,
+	SHOW_DENY = 5,
+	SELF_DESTRUCT = 6,
+	OPEN = 7
+}FOOTBALL_STATE_TYPE;
+FOOTBALL_STATE_TYPE state = IDLE;
 
 #include "utilities.h"
 
@@ -108,14 +122,51 @@ void display_temp(float temp, TEMPERATURE_UNIT_TYPE unit) {
 	}
 }
 
+void button_gpio_handler() {
+	if (button_held == false) {
+		gpio_timestamp = ticks;
+		button_held = true;
+	}
+	else if (button_held == true){
+		if ((ticks - gpio_timestamp) >= 3000) {
+			state = SELF_DESTRUCT;
+		}
+		button_held = false;
+	}
+	
+}
+
+void self_destruct() {
+	// SELF_DESTRUCT Action
+	c42412a_clear_all();
+	c42412a_show_text("BYE");
+	
+	for (int i = 0; i < 10; i++) {
+		set_bread_led(LED_0_PIN, LED_0_ACTIVE);
+		set_lcd_backlight(LCD_BACKLIGHT_ON);
+		set_bread_led(BREADBOARD_LED_PIN, LED_STATE_ON);
+		mdelay(100);
+		
+		set_bread_led(LED_0_PIN, LED_0_INACTIVE);
+		set_lcd_backlight(LCD_BACKLIGHT_OFF);
+		set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
+		mdelay(100);
+	}
+	
+	c42412a_clear_all();
+	exit(0);
+}
+
 int main (void)
 {
 	board_init();
-	c42412a_init();
 	sysclk_init();
+	c42412a_init();
 	SysTick_Config(sysclk_get_cpu_hz()/1000);
 	configure_lcd_backlight();
 	set_lcd_backlight(LCD_BACKLIGHT_OFF);
+	configure_button_interrupt(BREADBOARD_BUTTON2_PIN);
+	configure_console();
 
 	// Configure Breadboard LED
 	configure_bread_led(BREADBOARD_LED_PIN);
@@ -124,18 +175,7 @@ int main (void)
 	configure_bread_button(BREADBOARD_BUTTON1_PIN);
 	configure_bread_button(BREADBOARD_BUTTON2_PIN);
 	
-	// Define State Machine
-	typedef enum {
-		IDLE = 0,
-		CREATE_CODE = 1,
-		SHOW_COMBO = 2,
-		LOCKED = 3,
-		ENTER_CODE = 4,
-		SHOW_DENY = 5,
-		SELF_DESTRUCT = 6,
-		OPEN = 7
-	}FOOTBALL_STATE_TYPE;
-	FOOTBALL_STATE_TYPE state = IDLE;
+	
 	
 	// Define button level variables
 	GPIO_INPUT_STATE_TYPE button0_level = GPIO_INPUT_STATE_LOW;
@@ -153,8 +193,17 @@ int main (void)
 	char code_string[5] = "";
 	uint32_t index = 0;
 
+	uint32_t temp_timestamp = 0;
+	initialize_temperature_sensor();
 	while (1)
 	{
+		
+		if ((ticks - temp_timestamp) == 200){
+			temp_timestamp = ticks;
+			read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
+			display_temp(temp_val, TEMPERATURE_UNIT_FAHRENHEIT);
+		}
+		
 		button0_level = read_bread_button(BUTTON_0_PIN);
 		button1_level = read_bread_button(BREADBOARD_BUTTON1_PIN);
 		mdelay(10);
@@ -351,24 +400,7 @@ int main (void)
 			break;
 			
 			case SELF_DESTRUCT:
-			// SELF_DESTRUCT Action
-			c42412a_clear_all();
-			c42412a_show_text("BYE");
-			
-			for (int i = 0; i < 10; i++) {
-				set_bread_led(LED_0_PIN, LED_0_ACTIVE);
-				set_lcd_backlight(LCD_BACKLIGHT_ON);
-				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_ON);
-				mdelay(100);
-			
-				set_bread_led(LED_0_PIN, LED_0_INACTIVE);
-				set_lcd_backlight(LCD_BACKLIGHT_OFF);
-				set_bread_led(BREADBOARD_LED_PIN, LED_STATE_OFF);
-				mdelay(100);
-			}
-			
-			c42412a_clear_all();
-			exit(0);
+			self_destruct();
 			break;
 			
 			case OPEN:
