@@ -135,21 +135,21 @@ void self_destruct() {
 	exit(0);
 }
 
-// volatile bool read = false;
-// void TC00_Handler(void)
-// {
-// 	// tc_get_status must be called to acknowledge that the
-// 	// interrupt was handled
-// 	tc_get_status(TC0, 0);
-// 	// TODO: fill in the code to create the square wave
-// 	if (read) {
-// 		read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
-// 		read = false;
-// 	} else {
-// 		read = true;
-// 	}
-// 	
-// }
+volatile bool read = false;
+void TC00_Handler(void)
+{
+	// tc_get_status must be called to acknowledge that the
+	// interrupt was handled
+	tc_get_status(TC0, 0);
+	// TODO: fill in the code to create the square wave
+	if (read) {
+		read_temp_sensor(TEMPERATURE_UNIT_FAHRENHEIT);
+		read = false;
+	} else {
+		read = true;
+	}
+	
+}
 
 int main (void)
 {
@@ -160,8 +160,8 @@ int main (void)
 	configure_lcd_backlight();
 	set_lcd_backlight(LCD_BACKLIGHT_OFF);
 	configure_button_interrupt(BREADBOARD_BUTTON2_PIN);
-	/*configure_console();*/
-	/*configure_tc();*/
+	configure_console();
+	configure_tc();
 
 	// Configure Breadboard LED
 	configure_bread_led(BREADBOARD_LED_PIN);
@@ -186,8 +186,14 @@ int main (void)
 	char code_string[5] = "";
 	uint32_t index = 0;
 
-// 	uint32_t temp_timestamp = 0;
-// 	initialize_temperature_sensor();
+	uint32_t temp_timestamp = 0;
+	initialize_temperature_sensor();
+	
+	NVIC_SetPriority(SysTick_IRQn, 1);
+	NVIC_SetPriority(TWIM3_IRQn, 2);
+	NVIC_SetPriority(TC00_IRQn, 4);
+	NVIC_SetPriority(GPIO_0_IRQn, 3);
+	
 	while (1)
 	{
 		button0_level = read_bread_button(BUTTON_0_PIN);
