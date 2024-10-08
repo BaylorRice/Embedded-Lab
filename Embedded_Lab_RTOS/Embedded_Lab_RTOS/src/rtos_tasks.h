@@ -201,6 +201,7 @@ void task_update_position(void)
 		
 		// PART 5 DONE: Produce output as specified and take photo
 		printf("%lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
+		c42412a_show_numeric_dec((uint32_t)(plane_data->display_heading));
 		
 	}
 	
