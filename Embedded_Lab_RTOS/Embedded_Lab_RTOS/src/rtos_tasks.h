@@ -40,9 +40,15 @@ void waste_time(int iterations)
 
 void task_check_buttons(void)
 {
+	// Periodic Timing
+	TickType_t xLastWakeTime;
+	const TickType_t button_check_period = 10;
+	xLastWakeTime = xTaskGetTickCount();
+	
 	while(1)
 	{
-		// PART 1 TODO: use vTaskDelayUntil to run this task at 100Hz
+		// PART 1 DONE: use vTaskDelayUntil to run this task at 100Hz
+		vTaskDelayUntil(&xLastWakeTime, button_check_period);
 		
 		#ifdef TIMING_TEST
 		ioport_set_pin_level(EXT1_PIN_5, true);
@@ -65,9 +71,15 @@ void task_update_position(void)
 	
 	uint32_t cycle_counter = 0;
 	
+	// Periodic Timing
+	TickType_t xLastWakeTime;
+	const TickType_t position_check_period = 50;
+	xLastWakeTime = xTaskGetTickCount();
+	
 	while(1)
 	{	
-		// PART 1 TODO: use vTaskDelayUntil to run this task at 20Hz
+		// PART 1 DONE: use vTaskDelayUntil to run this task at 20Hz
+		vTaskDelayUntil(&xLastWakeTime, position_check_period);
 				
 		#ifdef TIMING_TEST
 		ioport_set_pin_level(EXT1_PIN_6, true);
