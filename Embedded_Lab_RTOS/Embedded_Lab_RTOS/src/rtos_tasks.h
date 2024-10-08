@@ -112,27 +112,27 @@ void task_update_position(void)
 		#endif
 		
 		#ifdef FULL_TEST
-		if(cycle_counter < CYCLES_PER_SECOND * 5)
+		if(cycle_counter < CYCLES_PER_SECOND * 5) //Both Buttons Unpressed
 		{
 			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
 			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		}
-		else if(cycle_counter < CYCLES_PER_SECOND * 12)
+		else if(cycle_counter < CYCLES_PER_SECOND * 12) //SW2 Pressed, SW1 Unpressed
 		{
 			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
 			button_info.sw2_level = GPIO_INPUT_LEVEL_HIGH;
 		}
-		else if(cycle_counter < CYCLES_PER_SECOND * 16)
+		else if(cycle_counter < CYCLES_PER_SECOND * 16) //Both Buttons Pressed
 		{
 			button_info.sw1_level = GPIO_INPUT_LEVEL_HIGH;
 			button_info.sw2_level = GPIO_INPUT_LEVEL_HIGH;
 		}
-		else if(cycle_counter < CYCLES_PER_SECOND * 28)
+		else if(cycle_counter < CYCLES_PER_SECOND * 28) //SW1 Pressed, SW2 Unpressed
 		{
 			button_info.sw1_level = GPIO_INPUT_LEVEL_HIGH;
 			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		}
-		else if(cycle_counter < CYCLES_PER_SECOND * 30)
+		else if(cycle_counter < CYCLES_PER_SECOND * 30) //Both Buttons Unpressed
 		{
 			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
 			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
@@ -146,7 +146,8 @@ void task_update_position(void)
 		cycle_counter++;
 		#endif
 		
-		// PART 4 TODO: Perform calculations 
+		// PART 4 TODO: Perform calculations
+		
 		
 		// PART 5 TODO: Produce output as specified and take photo
 	}
