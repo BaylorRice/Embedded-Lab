@@ -5,8 +5,8 @@
 
 //#define TIMING_TEST
 //#define LOW_SPEED_TEST
-#define HIGH_SPEED_TEST
-//#define FULL_TEST
+//#define HIGH_SPEED_TEST
+#define FULL_TEST
 #define TEST_SECONDS 30
 #define TEST_HEADING 45
 
@@ -199,7 +199,7 @@ void task_update_position(void)
 		plane_data->latitude += deltaY / MILES_PER_DEGREE_LAT;
 		plane_data->heading = plane_data->display_heading - 90;
 		
-		// PART 5 TODO: Produce output as specified and take photo
+		// PART 5 DONE: Produce output as specified and take photo
 		printf("%lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
 		
 	}
