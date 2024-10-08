@@ -4,8 +4,8 @@
 #include <math.h>
 
 //#define TIMING_TEST
-#define LOW_SPEED_TEST
-//#define HIGH_SPEED_TEST
+//#define LOW_SPEED_TEST
+#define HIGH_SPEED_TEST
 //#define FULL_TEST
 #define TEST_SECONDS 30
 #define TEST_HEADING 45
@@ -109,7 +109,7 @@ void task_update_position(void)
 			break;
 		}
 		cycle_counter++;
-		printf("Counter: %i\r\n", cycle_counter);
+		//printf("Counter: %i\r\n", cycle_counter);
 		button_levels.sw1_level = GPIO_INPUT_LEVEL_LOW;
 		button_levels.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		plane_data->display_heading = TEST_HEADING;
@@ -122,9 +122,10 @@ void task_update_position(void)
 			break;
 		}
 		cycle_counter++;
+		printf("Counter: %i\r\n", cycle_counter);
 		button_levels.sw1_level = GPIO_INPUT_LEVEL_HIGH;
 		button_levels.sw2_level = GPIO_INPUT_LEVEL_HIGH;
-		plane_data->heading = TEST_HEADING;
+		plane_data->display_heading = TEST_HEADING;
 		#endif
 		
 		#ifdef FULL_TEST
