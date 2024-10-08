@@ -1,0 +1,4 @@
+Red and Black - Power
+
+Yellow - EXT1_PIN_7 (SW1, Left Throttle)
+Blue - EXT1_PIN_8 (SW2, Right Throttle)
