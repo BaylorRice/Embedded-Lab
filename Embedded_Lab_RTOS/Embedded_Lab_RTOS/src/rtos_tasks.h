@@ -160,6 +160,32 @@ void task_update_position(void)
 		#endif
 		
 		// PART 4 TODO: Perform calculations
+		if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_LOW) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
+			plane_data->speed = LOW_THROTTLE_SPEED;
+		} 
+		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
+			plane_data->speed = LOW_THROTTLE_SPEED;
+			plane_data->display_heading += -0.5;
+			if (plane_data->display_heading < 0) {
+				plane_data->display_heading += 360;
+			}
+			if (plane_data->display_heading > 360) {
+				plane_data->display_heading += -360;
+			}
+		} 
+		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_LOW) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
+			plane_data->speed = LOW_THROTTLE_SPEED;
+			plane_data->display_heading += 0.5;
+			if (plane_data->display_heading < 0) {
+				plane_data->display_heading += 360;
+			}
+			if (plane_data->display_heading > 360) {
+				plane_data->display_heading += -360;
+			}
+		} 
+		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
+			plane_data->speed = HIGH_THROTTLE_SPEED;
+		}
 		
 		double mps = plane_data->speed / 3600;
 		double distance_moved = mps * 0.05;
