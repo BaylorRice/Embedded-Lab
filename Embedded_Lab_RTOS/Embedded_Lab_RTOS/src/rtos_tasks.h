@@ -3,8 +3,8 @@
 
 #include <math.h>
 
-#define TIMING_TEST
-//#define LOW_SPEED_TEST
+//#define TIMING_TEST
+#define LOW_SPEED_TEST
 //#define HIGH_SPEED_TEST
 //#define FULL_TEST
 #define TEST_SECONDS 30
@@ -71,6 +71,8 @@ void task_update_position(void)
 	
 	uint32_t cycle_counter = 0;
 	
+	ButtonStructType button_levels;
+	
 	AircraftDataStructType *plane_data;
 	plane_data = (AircraftDataStructType *) malloc(sizeof(AircraftDataStructType));
 	
@@ -103,56 +105,57 @@ void task_update_position(void)
 		#ifdef LOW_SPEED_TEST
 		if(cycle_counter > CYCLES_PER_SECOND * TEST_SECONDS)
 		{
-			printf("Final: %lf, %lf, %lf, %lf\r\n", aircraft_data->speed, aircraft_data->latitude, aircraft_data->longitude, aircraft_data->display_heading);
+			printf("Final: %lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
 			break;
 		}
 		cycle_counter++;
-		button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
-		button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
-		aircraft_data->heading = TEST_HEADING;
+		printf("Counter: %i\r\n", cycle_counter);
+		button_levels.sw1_level = GPIO_INPUT_LEVEL_LOW;
+		button_levels.sw2_level = GPIO_INPUT_LEVEL_LOW;
+		plane_data->display_heading = TEST_HEADING;
 		#endif
 		
 		#ifdef HIGH_SPEED_TEST
 		if(cycle_counter > CYCLES_PER_SECOND * TEST_SECONDS)
 		{
-			printf("Final: %lf, %lf, %lf, %lf\r\n", aircraft_data->speed, aircraft_data->latitude, aircraft_data->longitude, aircraft_data->display_heading);
+			printf("Final: %lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
 			break;
 		}
 		cycle_counter++;
-		button_info.sw1_level = GPIO_INPUT_LEVEL_HIGH;
-		button_info.sw2_level = GPIO_INPUT_LEVEL_HIGH;
-		aircraft_data->heading = TEST_HEADING;
+		button_levels.sw1_level = GPIO_INPUT_LEVEL_HIGH;
+		button_levels.sw2_level = GPIO_INPUT_LEVEL_HIGH;
+		plane_data->heading = TEST_HEADING;
 		#endif
 		
 		#ifdef FULL_TEST
 		if(cycle_counter < CYCLES_PER_SECOND * 5) //Both Buttons Unpressed
 		{
-			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
-			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw1_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		}
 		else if(cycle_counter < CYCLES_PER_SECOND * 12) //SW2 Pressed, SW1 Unpressed
 		{
-			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
-			button_info.sw2_level = GPIO_INPUT_LEVEL_HIGH;
+			button_levels.sw1_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw2_level = GPIO_INPUT_LEVEL_HIGH;
 		}
 		else if(cycle_counter < CYCLES_PER_SECOND * 16) //Both Buttons Pressed
 		{
-			button_info.sw1_level = GPIO_INPUT_LEVEL_HIGH;
-			button_info.sw2_level = GPIO_INPUT_LEVEL_HIGH;
+			button_levels.sw1_level = GPIO_INPUT_LEVEL_HIGH;
+			button_levels.sw2_level = GPIO_INPUT_LEVEL_HIGH;
 		}
 		else if(cycle_counter < CYCLES_PER_SECOND * 28) //SW1 Pressed, SW2 Unpressed
 		{
-			button_info.sw1_level = GPIO_INPUT_LEVEL_HIGH;
-			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw1_level = GPIO_INPUT_LEVEL_HIGH;
+			button_levels.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		}
 		else if(cycle_counter < CYCLES_PER_SECOND * 30) //Both Buttons Unpressed
 		{
-			button_info.sw1_level = GPIO_INPUT_LEVEL_LOW;
-			button_info.sw2_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw1_level = GPIO_INPUT_LEVEL_LOW;
+			button_levels.sw2_level = GPIO_INPUT_LEVEL_LOW;
 		}
 		else
 		{
-			printf("Final: %lf, %lf, %lf, %lf\r\n", aircraft_data->speed, aircraft_data->latitude, aircraft_data->longitude, aircraft_data->display_heading);
+			printf("Final: %lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
 			break;
 		}
 		
@@ -160,10 +163,10 @@ void task_update_position(void)
 		#endif
 		
 		// PART 4 TODO: Perform calculations
-		if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_LOW) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
+		if ((button_levels.sw1_level == GPIO_INPUT_LEVEL_LOW) && (button_levels.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
 			plane_data->speed = LOW_THROTTLE_SPEED;
 		} 
-		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
+		else if ((button_levels.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (button_levels.sw2_level == GPIO_INPUT_LEVEL_LOW)) {
 			plane_data->speed = LOW_THROTTLE_SPEED;
 			plane_data->display_heading += -0.5;
 			if (plane_data->display_heading < 0) {
@@ -173,7 +176,7 @@ void task_update_position(void)
 				plane_data->display_heading += -360;
 			}
 		} 
-		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_LOW) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
+		else if ((button_levels.sw1_level == GPIO_INPUT_LEVEL_LOW) && (button_levels.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
 			plane_data->speed = LOW_THROTTLE_SPEED;
 			plane_data->display_heading += 0.5;
 			if (plane_data->display_heading < 0) {
@@ -183,20 +186,22 @@ void task_update_position(void)
 				plane_data->display_heading += -360;
 			}
 		} 
-		else if ((buttonInfo.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (buttonInfo.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
+		else if ((button_levels.sw1_level == GPIO_INPUT_LEVEL_HIGH) && (button_levels.sw2_level == GPIO_INPUT_LEVEL_HIGH)) {
 			plane_data->speed = HIGH_THROTTLE_SPEED;
 		}
 		
 		double mps = plane_data->speed / 3600;
 		double distance_moved = mps * 0.05;
-		double deltaX = distance_moved * cos((plane_data->display_heading * M_PI) / 180);
-		double deltaY = distance_moved * sin((plane_data->display_heading * M_PI) / 180);
+		double deltaX = distance_moved * cos((plane_data->display_heading * M_PI) / (double)(180));
+		double deltaY = distance_moved * sin((plane_data->display_heading * M_PI) / (double)(180));
 		plane_data->x_position += deltaX;
 		plane_data->y_position += deltaY;
 		plane_data->longitude += deltaX / MILES_PER_DEGREE_LON;
 		plane_data->latitude += deltaY / MILES_PER_DEGREE_LAT;
+		plane_data->heading = plane_data->display_heading - 90;
 		
 		// PART 5 TODO: Produce output as specified and take photo
+		
 	}
 	
 	vTaskEndScheduler();
