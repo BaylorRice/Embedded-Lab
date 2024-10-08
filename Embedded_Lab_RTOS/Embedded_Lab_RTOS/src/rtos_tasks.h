@@ -71,6 +71,19 @@ void task_update_position(void)
 	
 	uint32_t cycle_counter = 0;
 	
+	AircraftDataStructType *plane_data;
+	plane_data = (AircraftDataStructType *) malloc(sizeof(AircraftDataStructType));
+	
+	plane_data->x_position = DOVER_LONGITUDE * MILES_PER_DEGREE_LON;
+	plane_data->y_position = DOVER_LATITUDE * MILES_PER_DEGREE_LAT;
+	plane_data->heading = 0;
+	plane_data->display_heading = 0;
+	plane_data->speed = 0;
+	plane_data->latitude = DOVER_LATITUDE;
+	plane_data->longitude = DOVER_LONGITUDE;
+	plane_data->photo_latitutde = 0;
+	plane_data->photo_longitude = 0;
+	
 	// Periodic Timing
 	TickType_t xLastWakeTime;
 	const TickType_t position_check_period = 50;
@@ -148,6 +161,14 @@ void task_update_position(void)
 		
 		// PART 4 TODO: Perform calculations
 		
+		double mps = plane_data->speed / 3600;
+		double distance_moved = mps * 0.05;
+		double deltaX = distance_moved * cos((plane_data->display_heading * M_PI) / 180);
+		double deltaY = distance_moved * sin((plane_data->display_heading * M_PI) / 180);
+		plane_data->x_position += deltaX;
+		plane_data->y_position += deltaY;
+		plane_data->longitude += deltaX / MILES_PER_DEGREE_LON;
+		plane_data->latitude += deltaY / MILES_PER_DEGREE_LAT;
 		
 		// PART 5 TODO: Produce output as specified and take photo
 	}
