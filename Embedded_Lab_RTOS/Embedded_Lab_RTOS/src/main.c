@@ -1,3 +1,13 @@
+/*
+ * Embedded Lab - Atmel RTOS
+ * Lab A5 - FreeRTOS
+ * Reese Ford
+ * Using code provided by Steven Potter
+ * Created: Oct 8, 2024
+ * Modified: Oct 8, 2024
+ * Last Commit: NONE
+*/
+
 /**
  * \file
  *
