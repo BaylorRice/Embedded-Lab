@@ -6,9 +6,9 @@
 //#define TIMING_TEST
 //#define LOW_SPEED_TEST
 //#define HIGH_SPEED_TEST
-#define FULL_TEST
-#define TEST_SECONDS 30
-#define TEST_HEADING 45
+//#define FULL_TEST
+//#define TEST_SECONDS 30
+//#define TEST_HEADING 45
 
 typedef struct buttonInfo {
 	GPIO_INPUT_LEVEL_TYPE sw0_level;
@@ -16,7 +16,7 @@ typedef struct buttonInfo {
 	GPIO_INPUT_LEVEL_TYPE sw2_level;
 }ButtonStructType;
 
-ButtonStructType button_info;
+ButtonStructType button_levels;
 
 typedef struct aircraftData {
 	double x_position;
@@ -55,9 +55,30 @@ void task_check_buttons(void)
 		waste_time(1000);
 		ioport_set_pin_level(EXT1_PIN_5, false);
 		#endif
+		
+		button_levels.sw0_level = ioport_get_pin_level(SW0_PIN);
+		button_levels.sw1_level = ioport_get_pin_level(SW1_PIN);
+		button_levels.sw2_level = ioport_get_pin_level(SW2_PIN);
+		
+// 		if (sw0_state == GPIO_INPUT_STATE_LOW) {
+// 			button_levels.sw0_level == GPIO_INPUT_LEVEL_HIGH;
+// 		} else if (sw0_state == GPIO_INPUT_STATE_HIGH) {
+// 			button_levels.sw0_level == GPIO_INPUT_LEVEL_LOW;
+// 		}
+// 		
+// 		if (sw1_state == GPIO_INPUT_STATE_HIGH) {
+// 			button_levels.sw1_level == GPIO_INPUT_LEVEL_HIGH;
+// 		} else if (sw1_state == GPIO_INPUT_STATE_LOW) {
+// 			button_levels.sw1_level == GPIO_INPUT_LEVEL_LOW;
+// 		}
+// 		
+// 		if (sw2_state == GPIO_INPUT_STATE_HIGH) {
+// 			button_levels.sw2_level == GPIO_INPUT_LEVEL_HIGH;
+// 		} else if (sw2_state == GPIO_INPUT_STATE_LOW) {
+// 			button_levels.sw2_level == GPIO_INPUT_LEVEL_LOW;
+// 		}
 	}
 }
-
 
 void task_update_position(void)
 {
@@ -70,8 +91,6 @@ void task_update_position(void)
 	const uint32_t CYCLES_PER_SECOND = 20;
 	
 	uint32_t cycle_counter = 0;
-	
-	ButtonStructType button_levels;
 	
 	AircraftDataStructType *plane_data;
 	plane_data = (AircraftDataStructType *) malloc(sizeof(AircraftDataStructType));

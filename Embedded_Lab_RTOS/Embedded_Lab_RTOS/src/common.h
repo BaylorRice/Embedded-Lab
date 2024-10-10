@@ -34,6 +34,4 @@ typedef enum{
 	LED_STATE_ON  = 1
 }LED_STATE_TYPE;
 
-
-
 #endif /* COMMON_H_ */
