@@ -204,6 +204,24 @@ void task_update_position(void)
 		printf("%lf, %lf, %lf, %lf\r\n", plane_data->speed, plane_data->latitude, plane_data->longitude, plane_data->display_heading);
 		c42412a_show_numeric_dec((uint32_t)(plane_data->display_heading));
 		
+		// Update Servo
+		double servo_value_d = 3.0;
+		uint32_t servo_value_i= 3;
+		double servo_angle_cal = plane_data->display_heading;
+		
+		if ((servo_angle_cal > 90) && (servo_angle_cal < 180)) {
+			servo_angle_cal = 90;
+		} else if ((servo_angle_cal >=180) && (servo_angle_cal < 270)) {
+			servo_angle_cal = -90;
+		} else if (servo_angle_cal >= 270) {
+			servo_angle_cal = -(360 - servo_angle_cal); 
+		}
+		servo_value_d = (servo_angle_cal-140.7)/(-18);
+		servo_value_i = round(servo_value_d);
+		
+		change_duty_cycle(servo_value_i);
+		//printf("Servo angle Cal: %lf; Servo value (d): %lf; Servo Value: %i\r\n", servo_angle_cal, servo_value_d, servo_value_i);
+		
 	}
 	
 	vTaskEndScheduler();
