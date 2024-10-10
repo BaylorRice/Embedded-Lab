@@ -232,6 +232,7 @@ void task_update_position(void)
 			distance_from_berlin = sqrt(pow((berlin_y_position - plane_data->y_position),2) + pow((berlin_x_position - plane_data->x_position),2));
 			printf("Final Position: %lf*N %lf*E\r\n", plane_data->latitude, plane_data->longitude);
 			printf("Distance to Berlin: %lf\r\n", distance_from_berlin);
+			free(plane_data);
 			break;
 		}
 		
