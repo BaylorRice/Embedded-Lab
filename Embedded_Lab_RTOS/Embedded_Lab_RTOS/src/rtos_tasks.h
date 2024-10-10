@@ -70,6 +70,8 @@ void task_update_position(void)
 	const double MILES_PER_DEGREE_LON = 54.6;
 	const double DOVER_LATITUDE = 51.15922;
 	const double DOVER_LONGITUDE = 1.202582;
+	const double BERLIN_LATITUDE = 52.5200;
+	const double BERLIN_LONGITUDE = 13.4050;
 	const uint32_t CYCLES_PER_SECOND = 20;
 	
 	uint32_t cycle_counter = 0;
@@ -221,6 +223,17 @@ void task_update_position(void)
 		
 		change_duty_cycle(servo_value_i);
 		//printf("Servo angle Cal: %lf; Servo value (d): %lf; Servo Value: %i\r\n", servo_angle_cal, servo_value_d, servo_value_i);
+		
+		if (button_levels.sw0_level == GPIO_INPUT_LEVEL_LOW) {
+			double distance_from_berlin = 0.0;
+			double berlin_x_position = BERLIN_LONGITUDE * MILES_PER_DEGREE_LON;
+			double berlin_y_position = BERLIN_LATITUDE * MILES_PER_DEGREE_LAT;
+			
+			distance_from_berlin = sqrt(pow((berlin_y_position - plane_data->y_position),2) + pow((berlin_x_position - plane_data->x_position),2));
+			printf("Final Position: %lf*N %lf*E\r\n", plane_data->latitude, plane_data->longitude);
+			printf("Distance to Berlin: %lf\r\n", distance_from_berlin);
+			break;
+		}
 		
 	}
 	
