@@ -59,24 +59,6 @@ void task_check_buttons(void)
 		button_levels.sw0_level = ioport_get_pin_level(SW0_PIN);
 		button_levels.sw1_level = ioport_get_pin_level(SW1_PIN);
 		button_levels.sw2_level = ioport_get_pin_level(SW2_PIN);
-		
-// 		if (sw0_state == GPIO_INPUT_STATE_LOW) {
-// 			button_levels.sw0_level == GPIO_INPUT_LEVEL_HIGH;
-// 		} else if (sw0_state == GPIO_INPUT_STATE_HIGH) {
-// 			button_levels.sw0_level == GPIO_INPUT_LEVEL_LOW;
-// 		}
-// 		
-// 		if (sw1_state == GPIO_INPUT_STATE_HIGH) {
-// 			button_levels.sw1_level == GPIO_INPUT_LEVEL_HIGH;
-// 		} else if (sw1_state == GPIO_INPUT_STATE_LOW) {
-// 			button_levels.sw1_level == GPIO_INPUT_LEVEL_LOW;
-// 		}
-// 		
-// 		if (sw2_state == GPIO_INPUT_STATE_HIGH) {
-// 			button_levels.sw2_level == GPIO_INPUT_LEVEL_HIGH;
-// 		} else if (sw2_state == GPIO_INPUT_STATE_LOW) {
-// 			button_levels.sw2_level == GPIO_INPUT_LEVEL_LOW;
-// 		}
 	}
 }
 
