@@ -2,7 +2,7 @@
 # Reese Ford
 # Created 10/22/2024
 # Modified 10/22/2024 by Reese Ford
-# Last Commit: none
+# Last Commit: 13801668ff8ea79726757fa88a2b1683d8bac6c2
 
 def calc_slope_list(elementDict):
     return (elementDict['y'] - elementDict['b']) / elementDict['x']
