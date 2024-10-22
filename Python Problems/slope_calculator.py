@@ -5,7 +5,7 @@
 # Last Commit: d64f677ed60f1fff0ebef7ccbd22db69ad0c6edc
 
 def calc_slope(y, x, b) :
-    return (x / y)
+    return (y-b) / x
 
 slope = calc_slope(28,3,5)
 print("Slope =", slope)
