@@ -12,3 +12,8 @@ lineList2 = [135, 888, 21, -325]
 
 lineList1[1] = calc_slope_list(lineList1)
 lineList2[1] = calc_slope_list(lineList2)
+
+print("Slope of List 1 =", lineList1[1])
+print("Slope of Line 2 =", lineList2[1])
+print(lineList1)
+print(lineList2)
