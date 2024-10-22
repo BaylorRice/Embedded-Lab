@@ -2,7 +2,7 @@
 # Reese Ford
 # Created 10/22/2024
 # Modified 10/22/2024 by Reese Ford
-# Last Commit: d5a0e1317efeae0541e263797fac4f62ab1be223
+# Last Commit: ccacccf2ebdc6476db1fc632992638f4bf831bdf
 
 def calc_slope_list(elementList):
     return (elementList[0] - elementList[3]) / elementList[2]
