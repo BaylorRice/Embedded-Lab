@@ -2,7 +2,7 @@
 # Reese Ford
 # Created 10/22/2024
 # Modified 10/22/2024 by Reese Ford
-# Last Commit: none
+# Last Commit: b45ae8b2d8ab0042d61d308cfa3deb5cd2e9296d
 
 class Automobile:
     def __init__(self, make, model, mpg, range, fuelType):
