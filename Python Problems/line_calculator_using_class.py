@@ -2,7 +2,7 @@
 # Reese Ford
 # Created 10/22/2024
 # Modified 10/22/2024 by Reese Ford
-# Last Commit: none
+# Last Commit: c0759dae5b0c23d4ce750f2703a6c47c7fd4e921
 
 class LineCalculator:
     def __init__(self, name, lineData):
