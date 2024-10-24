@@ -16,14 +16,29 @@ try:
 except RuntimeError:
     print("Error importing RPi.GPIO")
 
+GPIO.cleanup
+GPIO.setwarnings(False)
+
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(BUTTON_0_PIN, GPIO.IN)
 GPIO.setup(LED_0_PIN, GPIO.OUT)
 
-# Test LED
+# Basic Flashlight
+letgo = True
+led_power = False
+
 while True:
     if GPIO.input(BUTTON_0_PIN):
+        if letgo:
+            led_power = not led_power
+            letgo = False
+
+    else:
+        letgo = True
+
+    if led_power:
         GPIO.output(LED_0_PIN, True)
     else:
         GPIO.output(LED_0_PIN, False)
+    
     time.sleep(0.01)
