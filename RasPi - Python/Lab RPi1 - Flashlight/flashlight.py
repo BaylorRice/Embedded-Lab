@@ -4,6 +4,8 @@
 # Modified 10/24/2024 by Reese Ford
 # Last Commit: none
 
+import time
+
 # Pin Vars
 BUTTON_0_PIN = 16
 LED_0_PIN = 18
@@ -16,11 +18,12 @@ except RuntimeError:
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(BUTTON_0_PIN, GPIO.IN)
+GPIO.setup(LED_0_PIN, GPIO.OUT)
 
-while (1):
+# Test LED
+while True:
     if GPIO.input(BUTTON_0_PIN):
-        print("Input was HIGH")
+        GPIO.output(LED_0_PIN, True)
     else:
-        print("Input was LOW")
-
-
+        GPIO.output(LED_0_PIN, False)
+    time.sleep(0.01)
