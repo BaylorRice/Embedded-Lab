@@ -4,7 +4,6 @@
 # Modified 10/24/2024 by Reese Ford
 # Last Commit: f8ec7156e63cbdf60680c6c14e10140279bc5385
 
-import time
 import sys
 
 try:
