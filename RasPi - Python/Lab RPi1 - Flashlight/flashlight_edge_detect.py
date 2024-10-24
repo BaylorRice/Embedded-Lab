@@ -2,7 +2,7 @@
 # Reese Ford
 # Created 10/24/2024
 # Modified 10/24/2024 by Reese Ford
-# Last Commit: none
+# Last Commit: f8ec7156e63cbdf60680c6c14e10140279bc5385
 
 import time
 import sys
@@ -33,7 +33,7 @@ try:
             GPIO.output(LED_0_PIN, True)
         else:
             GPIO.output(LED_0_PIN, False)
-            
+
         channel = GPIO.wait_for_edge(BUTTON_0_PIN, GPIO.FALLING, timeout=1000, bouncetime=10)
 
 
