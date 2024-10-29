@@ -1,0 +1,7 @@
+Black (GND) -> 25
+Red (3V3) -> 17
+
+Blue (SCLK) -> 23
+Grey (MISO) -> 21
+Green (MOSI) -> 19
+Yellow (CS) -> 24
