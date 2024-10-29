@@ -15,6 +15,8 @@ import spidev
 # Initialize SPI
 spi = spidev.SpiDev()
 spi.open(0, 0)
+spi.max_speed_hz = 100000
+
 def read_adc() :
     # Configure ADC
     configureADCPacket = [0x1, 0x80, 0x0]
