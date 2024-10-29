@@ -11,6 +11,8 @@ PIN_MOSI = 19
 PIN_CS = 24
 
 import spidev
+import time
+import sys
 
 # Initialize SPI
 spi = spidev.SpiDev()
@@ -29,3 +31,12 @@ def read_adc() :
     # Convert to Voltage
     voltage = (adcValue / (pow(2,10) - 1)) * 3.3
     return voltage
+
+try: 
+    while True:
+        voltage = read_adc()
+        print(voltage)
+        time.sleep(1)
+except KeyboardInterrupt:
+    print(" Stopping Program")
+    sys.exit()
