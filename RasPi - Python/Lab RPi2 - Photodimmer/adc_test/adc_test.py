@@ -4,3 +4,10 @@
 # Modified 10/29/2024 by Reese Ford
 # Last Commit: 
 
+# Pin Vars
+
+
+import spidev
+
+spi = spidev.SpiDev()
+spi.open()
