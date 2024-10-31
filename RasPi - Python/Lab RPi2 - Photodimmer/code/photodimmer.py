@@ -71,10 +71,15 @@ try:
     
     print("Max:", max_adcValue, "  Min:", min_adcValue)
 
+    m = (0 - 100) / (min_adcValue - max_adcValue)
+
     # Photodimmer
     while True:
         adcValue = read_adc()
         print(adcValue)
+        dutyCycleVal = m * (adcValue - min_adcValue)
+        print(dutyCycleVal)
+        pwm.set_duty_cycle(dutyCycleVal)
 
 
 except KeyboardInterrupt:
