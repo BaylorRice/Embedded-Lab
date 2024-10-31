@@ -19,8 +19,7 @@ class HW_PWM:
         time.sleep(0.5)
 
         print('HW_PWM - Set the period')
-        period = int(1000000000 / frequency)
-        period_cmd = "echo " + str(period) + " > " + PWM_PATH + "/pwm0/period"
+        period_cmd = "echo " + str(self.period) + " > " + PWM_PATH + "/pwm0/period"
         #print(period_cmd)
         os.system(period_cmd)
         time.sleep(0.5)
