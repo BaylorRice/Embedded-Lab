@@ -12,6 +12,7 @@ class HW_PWM:
         self.duty_cycle = 0
         export_cmd = "echo 0 > " + PWM_PATH + "/export"
         enable_cmd = "echo 1 > " + PWM_PATH + "/pwm0/enable"
+        
         print('HW_PWM - Create PWM0')
         print(export_cmd)
         os.system(export_cmd)
