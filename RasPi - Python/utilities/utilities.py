@@ -20,13 +20,13 @@ class HW_PWM:
 
         print('HW_PWM - Set the period')
         period_cmd = "echo " + str(self.period) + " > " + PWM_PATH + "/pwm0/period"
-        #print(period_cmd)
+        print(period_cmd)
         os.system(period_cmd)
         time.sleep(0.5)
 
         print('HW_PWM - Set duty cycle to 0')
         duty_cycle_cmd = "echo 0 > " + PWM_PATH + "/pwm0/duty_cycle"
-        #print(duty_cycle_cmd)
+        print(duty_cycle_cmd)
         os.system(duty_cycle_cmd)
         time.sleep(0.5)
 
