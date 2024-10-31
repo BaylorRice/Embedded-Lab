@@ -12,25 +12,25 @@ class HW_PWM:
         self.duty_cycle = 0
         export_cmd = "echo 0 > " + PWM_PATH + "/export"
         enable_cmd = "echo 1 > " + PWM_PATH + "/pwm0/enable"
-        print('Create PWM0')
+        print('HW_PWM - Create PWM0')
         print(export_cmd)
         os.system(export_cmd)
         time.sleep(0.5)
 
-        print('Set the period')
+        print('HW_PWM - Set the period')
         period = int(1000000000 / frequency)
         period_cmd = "echo " + str(period) + " > " + PWM_PATH + "/pwm0/period"
         ##print(period_cmd)
         os.system(period_cmd)
         time.sleep(0.5)
 
-        print('Set duty cycle to 0')
+        print('HW_PWM - Set duty cycle to 0')
         duty_cycle_cmd = "echo 0 > " + PWM_PATH + "/pwm0/duty_cycle"
         #print(duty_cycle_cmd)
         os.system(duty_cycle_cmd)
         time.sleep(0.5)
 
-        print('Enable PWM0')
+        print('HW_PWM - Enable PWM0')
         print(enable_cmd)
         os.system(enable_cmd)
         time.sleep(0.5)
