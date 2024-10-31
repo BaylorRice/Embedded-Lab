@@ -42,9 +42,9 @@ class HW_PWM:
             duty_cycle_percent = 0    
 
         self.duty_cycle_int = self.period * duty_cycle_percent/100
-        duty_cycle_cmd = "echo " + str(self.duty_cycle_int) + " > " + PWM_PATH + "/pwm0/duty_cycle"
+        duty_cycle_cmd = "echo " + str(int(self.duty_cycle_int)) + " > " + PWM_PATH + "/pwm0/duty_cycle"
         
-        print("HW_PWM - Set duty cycle to " + str(self.duty_cycle_int))
+        print("HW_PWM - Set duty cycle to " + str(self.duty_cycle_int) + " (" + str(duty_cycle_percent) + "%)")
         print("HW_PWM - " + duty_cycle_cmd)
         os.system(duty_cycle_cmd)
-        time.sleep(0.5)
+        time.sleep(0.01)
