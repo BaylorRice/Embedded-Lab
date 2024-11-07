@@ -1,3 +1,4 @@
 Record=TopLevelDocument|FileName=ControlCircuit.SchDoc|SheetNumber=2
+Record=NoMainPathDocument|SourceDocument=ControlCircuit.SchDoc|FileName=FullCircuit.SchDoc|SheetNumber=4
 Record=NoMainPathDocument|SourceDocument=ControlCircuit.SchDoc|FileName=Optociruit.SchDoc|SheetNumber=1
 Record=NoMainPathDocument|SourceDocument=ControlCircuit.SchDoc|FileName=TachCircuit.SchDoc|SheetNumber=3
