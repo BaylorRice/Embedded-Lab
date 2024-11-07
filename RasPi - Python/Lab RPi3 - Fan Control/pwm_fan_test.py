@@ -2,7 +2,7 @@ import time
 import sys
 import os
 
-sys.path.insert(0, '../utilities')
+sys.path.insert(0, 'utilities')
 import utilities
 
 pwm = utilities.HW_PWM(25000)
