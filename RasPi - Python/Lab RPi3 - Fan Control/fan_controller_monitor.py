@@ -37,6 +37,7 @@ count = 0
 running_callback = False
 
 def sense_callback(channel):
+    global running_callback 
     running_callback = True
     previous_time = current_time 
     current_time = time.time_ns()
@@ -53,6 +54,7 @@ def sense_callback(channel):
         count = 0
         rpm_average = rpm_average / 10
         file.write(rpm_average)
+        print(rpm_average)
         rpm_average = 0
 
     running_callback = False
