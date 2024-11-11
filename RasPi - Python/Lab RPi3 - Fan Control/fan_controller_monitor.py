@@ -38,12 +38,17 @@ running_callback = False
 
 def sense_callback(channel):
     global running_callback 
+    global previous_time
+    global current_time
+    global count
+    global rpm_average
+
     running_callback = True
     previous_time = current_time 
     current_time = time.time_ns()
 
     if (previous_time != 0):
-        period = previous_time - current_time
+        period = current_time - previous_time
         period = period * pow(10,-9)
         mpr = (period * 2) / 60
         rpm = 1/mpr
@@ -53,8 +58,7 @@ def sense_callback(channel):
     if (count == 10):
         count = 0
         rpm_average = rpm_average / 10
-        file.write(rpm_average)
-        print(rpm_average)
+        file.write(str(rpm_average) + "\n")
         rpm_average = 0
 
     running_callback = False
@@ -66,17 +70,18 @@ GPIO.add_event_callback(SENSE_PIN, sense_callback)
 try:
     # Ask user for input
     while True:
-        speedPercent = input("Enter desired fan speed as a percentage (0.0 - 100.0): ")
+        speedPercent = float(input("Enter desired fan speed as a percentage (0.0 - 100.0): "))
         if (speedPercent > 100):
             speedPercent = 100
         elif (speedPercent < 0):
             speedPercent = 0
-        
+        file.write("Speed set to: " + str(speedPercent) + "%\n")
         pwm.set_duty_cycle(-speedPercent + 100)
     
 except KeyboardInterrupt:
     print('Got Keyboard Interrupt. Cleaning up and exiting')
     while running_callback:
         time.sleep(0.1)
+    file.close()
     pwm.set_duty_cycle(100.0)
     sys.exit()
