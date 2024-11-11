@@ -17,6 +17,9 @@ except RuntimeError:
 sys.path.insert(0, 'utilities')
 import utilities
 
+file = open("rpm_value_file.txt", "w")
+file.write("File Start\n")
+
 # Setup PWM
 pwm = utilities.HW_PWM(25000)
 pwm.set_duty_cycle(100.0)
@@ -31,7 +34,10 @@ previous_time = 0
 rpm_average = 0
 count = 0
 
+running_callback = False
+
 def sense_callback(channel):
+    running_callback = True
     previous_time = current_time 
     current_time = time.time_ns()
 
@@ -44,8 +50,13 @@ def sense_callback(channel):
         count += 1
 
     if (count == 10):
+        count = 0
         rpm_average = rpm_average / 10
-        # Start Here
+        file.write(rpm_average)
+        rpm_average = 0
+
+    running_callback = False
+        
 
 GPIO.add_event_detect(SENSE_PIN, GPIO.FALLING, bouncetime=10)
 GPIO.add_event_callback(SENSE_PIN, sense_callback)
@@ -58,9 +69,12 @@ try:
             speedPercent = 100
         elif (speedPercent < 0):
             speedPercent = 0
-
-
+        
+        pwm.set_duty_cycle(-speedPercent + 100)
+    
 except KeyboardInterrupt:
     print('Got Keyboard Interrupt. Cleaning up and exiting')
+    while running_callback:
+        time.sleep(0.1)
     pwm.set_duty_cycle(100.0)
     sys.exit()
