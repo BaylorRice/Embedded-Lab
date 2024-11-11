@@ -17,7 +17,7 @@ except RuntimeError:
 sys.path.insert(0, 'utilities')
 import utilities
 
-file = open("rpm_value_file.txt", "w")
+file = open("Lab RPi3 - Fan Control/rpm_value_file.txt", "w")
 file.write("File Start (0% fan speed)\n")
 
 # Setup PWM
