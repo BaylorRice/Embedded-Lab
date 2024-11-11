@@ -36,6 +36,7 @@ count = 0
 
 running_callback = False
 
+# Sense Interrupt
 def sense_callback(channel):
     global running_callback 
     global previous_time
@@ -63,7 +64,7 @@ def sense_callback(channel):
 
     running_callback = False
         
-
+# Set GPIO Interrupts
 GPIO.add_event_detect(SENSE_PIN, GPIO.FALLING, bouncetime=10)
 GPIO.add_event_callback(SENSE_PIN, sense_callback)
 
