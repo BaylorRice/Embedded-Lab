@@ -18,7 +18,7 @@ sys.path.insert(0, 'utilities')
 import utilities
 
 file = open("rpm_value_file.txt", "w")
-file.write("File Start\n")
+file.write("File Start (0% fan speed)\n")
 
 # Setup PWM
 pwm = utilities.HW_PWM(25000)
@@ -82,6 +82,6 @@ except KeyboardInterrupt:
     print('Got Keyboard Interrupt. Cleaning up and exiting')
     while running_callback:
         time.sleep(0.1)
-    file.close()
     pwm.set_duty_cycle(100.0)
+    file.close()
     sys.exit()
