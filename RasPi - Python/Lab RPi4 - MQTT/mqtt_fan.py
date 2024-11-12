@@ -8,7 +8,7 @@
 import time
 import sys
 import os
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt # type: ignore
 
 try:
     import RPi.GPIO as GPIO

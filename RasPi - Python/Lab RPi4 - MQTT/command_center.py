@@ -1,6 +1,6 @@
 import time
 import sys
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt # type: ignore
 
 # this callback runs once when the client connects with the broker
 def on_connect(client, userdata, flags, rc):
