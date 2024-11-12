@@ -8,17 +8,40 @@
 import time
 import sys
 import os
+import paho.mqtt.client as mqtt
 
 try:
     import RPi.GPIO as GPIO
 except RuntimeError:
     print("Error importing RPi.GPIO")
 
-sys.path.insert(0, 'utilities')
+sys.path.insert(0, '../utilities')
 import utilities
 
-file = open("Lab RPi3 - Fan Control/rpm_value_file.txt", "w")
-file.write("File Start (0% fan speed)\n")
+# Arguments
+numArgs = len(sys.argv)
+my_name = sys.argv[1]
+partner_name = sys.argv[2]
+pub_topic_name = my_name + '/mqtt_fan/fan_rpm_value'
+sub_topic_name = partner_name + '/command_center/desired_speed'
+
+# MQTT Functions
+def on_connect(client, userdata, flags, rc):
+    print(f"Connected with result code {rc}")
+    print('Subscribing to topic ', sub_topic_name)
+    client.subscribe(sub_topic_name)
+
+desired_speed = 0
+def on_message(client, userdata, msg):
+    global desired_speed
+    desired_speed = (float(msg.payload))
+
+# Initialize MQTT
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect("broker.emqx.io", 1883, 60)
+client.loop_start()
 
 # Setup PWM
 pwm = utilities.HW_PWM(25000)
@@ -59,7 +82,7 @@ def sense_callback(channel):
     if (count == 10):
         count = 0
         rpm_average = rpm_average / 10
-        file.write(str(rpm_average) + "\n")
+        client.publish(pub_topic_name, payload=rpm_average, qos=0, retain=False)
         rpm_average = 0
 
     running_callback = False
@@ -71,18 +94,11 @@ GPIO.add_event_callback(SENSE_PIN, sense_callback)
 try:
     # Ask user for input
     while True:
-        speedPercent = float(input("Enter desired fan speed as a percentage (0.0 - 100.0): "))
-        if (speedPercent > 100):
-            speedPercent = 100
-        elif (speedPercent < 0):
-            speedPercent = 0
-        file.write("Speed set to: " + str(speedPercent) + "%\n")
-        pwm.set_duty_cycle(-speedPercent + 100)
+        pwm.set_duty_cycle(-desired_speed + 100)
     
 except KeyboardInterrupt:
     print('Got Keyboard Interrupt. Cleaning up and exiting')
     while running_callback:
         time.sleep(0.1)
     pwm.set_duty_cycle(100.0)
-    file.close()
     sys.exit()
