@@ -35,6 +35,7 @@ desired_speed = 0
 def on_message(client, userdata, msg):
     global desired_speed
     desired_speed = (float(msg.payload))
+    print("Desired Speed:", desired_speed)
 
 # Initialize MQTT
 client = mqtt.Client()
