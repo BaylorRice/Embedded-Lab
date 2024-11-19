@@ -59,8 +59,9 @@ try:
         temp_f = read_temp_f()
 
         # Value Prints (remove for production)
-        print("Light Voltage:",light_voltage)
-        print("Temp:",temp_f)
+        #print("")
+        #print("Light Voltage:",light_voltage)
+        #print("Temp:",temp_f)
 
         # "Calculate" Activity
         activity = None
