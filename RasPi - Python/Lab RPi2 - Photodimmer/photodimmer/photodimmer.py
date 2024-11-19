@@ -48,26 +48,8 @@ def read_adc() :
     return adcValue
 
 try:
-    # Calibration - Covered (max)
-    print(" ")
-    print("Cover the photosensor and press the push button")
-    while True:
-        channel = GPIO.wait_for_edge(BUTTON_0_PIN, GPIO.RISING, timeout = 1000, bouncetime=10)
-        if channel == BUTTON_0_PIN:
-            max_adcValue = read_adc()
-
-            channel = GPIO.wait_for_edge(BUTTON_0_PIN, GPIO.FALLING, timeout=1000, bouncetime=10)
-            break
-
-    # Calibration - Bright (min)
-    print("Shine a flashlight on the photosensor and press the push button")
-    while True:
-        channel = GPIO.wait_for_edge(BUTTON_0_PIN, GPIO.RISING, timeout = 1000, bouncetime=10)
-        if channel == BUTTON_0_PIN:
-            min_adcValue = read_adc()
-
-            channel = GPIO.wait_for_edge(BUTTON_0_PIN, GPIO.FALLING, timeout=1000, bouncetime=10)
-            break
+    max_adcValue = 940
+    min_adcValue = 140
     
     print("Max:", max_adcValue, "  Min:", min_adcValue)
 
