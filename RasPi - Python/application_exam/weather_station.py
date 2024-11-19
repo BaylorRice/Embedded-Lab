@@ -57,9 +57,13 @@ try:
         # Read values
         light_voltage = read_light_voltage()
         temp_f = read_temp_f()
-        activity = None
+
+        # Value Prints (remove for production)
+        print("Light Voltage:",light_voltage)
+        print("Temp:",temp_f)
 
         # "Calculate" Activity
+        activity = None
         if (light_voltage >= 2): # Dark
             if (temp_f > 65):
                 activity = 5
