@@ -8,6 +8,11 @@ import time
 import sys
 import paho.mqtt.client as mqtt # type: ignore
 
+sys.path.insert(0, '../utilities')
+from utilities import HW_PWM
+
+pwm = HW_PWM(2000)
+
 # Arguments
 numArgs = len(sys.argv)
 sub_topic_name = sys.argv[1] + '/weather_station/weather_update'
@@ -25,18 +30,25 @@ def on_message(client, userdata, msg):
 
     if (activity == 0):
         print("Stay home, dude!")
+        pwm.set_duty_cycle(0)
     elif (activity == 1):
         print("Bonfire, dude!")
+        pwm.set_duty_cycle(25)
     elif (activity == 2):
         print("Surf's up, dude!")
+        pwm.set_duty_cycle(50)
     elif (activity == 3):
         print("Too dark to surf, dude!")
+        pwm.set_duty_cycle(0)
     elif (activity == 4):
         print("Bag some rays, dude!")
+        pwm.set_duty_cycle(100)
     elif (activity == 5):
         print("Too dark to bag rays, dude!")
+        pwm.set_duty_cycle(0)
     else:
         print("ERROR: No activity found")
+        pwm.set_duty_cycle(0)
 
 # Initialize MQTT
 client = mqtt.Client()
