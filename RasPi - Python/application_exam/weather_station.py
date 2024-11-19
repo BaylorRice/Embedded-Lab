@@ -60,7 +60,7 @@ try:
         activity = None
 
         # "Calculate" Activity
-        if (read_light_voltage >= 2): # Dark
+        if (light_voltage >= 2): # Dark
             if (temp_f > 65):
                 activity = 5
             elif (temp_f >= 50):
@@ -69,7 +69,7 @@ try:
                 activity = 1
             elif (temp_f < 35):
                 activity = 0
-        elif (read_light_voltage < 2): # Light
+        elif (light_voltage < 2): # Light
             if (temp_f > 65):
                 activity = 4
             elif (temp_f >= 50):
