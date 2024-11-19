@@ -79,6 +79,22 @@ try:
             elif (temp_f < 35):
                 activity = 0
 
+        # Print Activity Message
+        if (activity == 0):
+            print("Stay home, dude!")
+        elif (activity == 1):
+            print("Bonfire, dude!")
+        elif (activity == 2):
+            print("Surf's up, dude!")
+        elif (activity == 3):
+            print("Too dark to surf, dude!")
+        elif (activity == 4):
+            print("Bag some rays, dude!")
+        elif (activity == 5):
+            print("Too dark to bag rays, dude!")
+        else:
+            print("ERROR: No activity found")
+
         time.sleep(1)
 except KeyboardInterrupt:
     print(" Stopping Program")
