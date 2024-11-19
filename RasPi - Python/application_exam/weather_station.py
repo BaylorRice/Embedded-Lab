@@ -13,6 +13,16 @@ PIN_CS = 24
 import spidev
 import time
 import sys
+import paho.mqtt.client as mqtt # type: ignore
+
+# Arguments
+numArgs = len(sys.argv)
+pub_topic_name = sys.argv[1] + '/weather_station/weather_update'
+
+# Initialize MQTT
+client = mqtt.Client()
+client.connect("broker.emqx.io", 1883, 60)
+client.loop_start()
 
 # Initialize SPI
 spi = spidev.SpiDev()
@@ -53,6 +63,7 @@ def read_light_voltage() :
 
 
 try: 
+    previous_activity = None
     while True:
         # Read values
         light_voltage = read_light_voltage()
@@ -64,7 +75,9 @@ try:
         #print("Temp:",temp_f)
 
         # "Calculate" Activity
+        previous_activity = activity
         activity = None
+
         if (light_voltage >= 2): # Dark
             if (temp_f > 65):
                 activity = 5
@@ -99,6 +112,9 @@ try:
             print("Too dark to bag rays, dude!")
         else:
             print("ERROR: No activity found")
+
+        if previous_activity != activity:
+            client.publish(pub_topic_name, payload=activity, qos=0, retain=False)
 
         time.sleep(1)
 except KeyboardInterrupt:
