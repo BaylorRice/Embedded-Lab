@@ -38,6 +38,10 @@ def read_temp() :
     temp_f = (9/5)*temp_c + 32
     return temp_f
 
+def read_light_voltage() :
+    # Configure ADC
+    configureADCPacket = [0x1, 0x80, 0x0]
+    recieved = spi.xfer(configureADCPacket)
 
     # Convert to ADC Value
     recieved[1] = recieved[1] << 8
@@ -47,9 +51,10 @@ def read_temp() :
     voltage = (adcValue / (pow(2,10) - 1)) * 3.3
     return voltage
 
+
 try: 
     while True:
-        voltage = read_adc()
+        voltage = read_light_voltage()
         print(voltage)
         time.sleep(1)
 except KeyboardInterrupt:
