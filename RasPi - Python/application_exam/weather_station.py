@@ -54,8 +54,31 @@ def read_light_voltage() :
 
 try: 
     while True:
-        voltage = read_light_voltage()
-        print(voltage)
+        # Read values
+        light_voltage = read_light_voltage()
+        temp_f = read_temp_f()
+        activity = None
+
+        # "Calculate" Activity
+        if (read_light_voltage >= 2): # Dark
+            if (temp_f > 65):
+                activity = 5
+            elif (temp_f >= 50):
+                activity = 3
+            elif (temp_f >= 35):
+                activity = 1
+            elif (temp_f < 35):
+                activity = 0
+        elif (read_light_voltage < 2): # Light
+            if (temp_f > 65):
+                activity = 4
+            elif (temp_f >= 50):
+                activity = 2
+            elif (temp_f >= 35):
+                activity = 1
+            elif (temp_f < 35):
+                activity = 0
+
         time.sleep(1)
 except KeyboardInterrupt:
     print(" Stopping Program")
