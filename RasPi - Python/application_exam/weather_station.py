@@ -64,6 +64,7 @@ def read_light_voltage() :
 
 try: 
     previous_activity = None
+    activity = None
     while True:
         # Read values
         light_voltage = read_light_voltage()
