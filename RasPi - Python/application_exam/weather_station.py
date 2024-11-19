@@ -19,7 +19,7 @@ spi = spidev.SpiDev()
 spi.open(0, 0)
 spi.max_speed_hz = 100000
 
-def read_temp() :
+def read_temp_f() :
     # Configure ADC
     configureADCPacket = [0x1, 0x20, 0x0]
     recieved = spi.xfer(configureADCPacket)
